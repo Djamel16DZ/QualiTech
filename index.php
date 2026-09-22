@@ -13,70 +13,117 @@
 </head>
 <body class="h-full flex overflow-hidden font-sans antialiased text-sm">
 
-    <!-- COLLAPSIBLE SIDEBAR -->
-    <aside id="sidebar" class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col transition-all duration-300 z-20 shrink-0">
+    <!-- COLLAPSIBLE SIDEBAR (Masquage total w-0) -->
+    <aside id="sidebar" class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col transition-all duration-300 z-20 shrink-0 overflow-hidden">
         <!-- Logo & Header -->
-        <div class="h-14 flex items-center justify-between px-4 border-b border-slate-800 shrink-0">
+        <div class="h-14 flex items-center justify-between px-4 border-b border-slate-800 shrink-0 w-64">
             <div class="flex items-center space-x-3 overflow-hidden">
                 <div class="p-2 bg-blue-600 rounded-lg text-white font-bold text-xs shrink-0">
                     <i class="fa-solid fa-award text-base"></i>
                 </div>
-                <span id="brand-title" class="font-bold text-slate-100 truncate text-base sidebar-text">QualiTech <span class="text-blue-500">17025</span></span>
+                <span id="brand-title" class="font-bold text-slate-100 truncate text-base">QualiTech <span class="text-blue-500">17025</span></span>
             </div>
-            <button id="toggle-sidebar" class="text-slate-400 hover:text-white p-1 rounded focus:outline-none transition" title="Réduire la barre (Ctrl+B)">
-                <i id="toggle-icon" class="fa-solid fa-angles-left text-sm"></i>
+            <button id="toggle-sidebar" class="text-slate-400 hover:text-white p-1 rounded focus:outline-none transition" title="Masquer la barre (Ctrl+B)">
+                <i class="fa-solid fa-angles-left text-sm"></i>
             </button>
         </div>
 
         <!-- Navigation Links -->
-        <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-1">
-            <div class="px-3 pb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider sidebar-label truncate">
-                Processus ISO 17025
-            </div>
-            <a href="#" data-nav-filter="" class="nav-item flex items-center px-3 py-2 text-slate-200 bg-blue-600/20 text-blue-400 rounded-md group font-medium transition" title="Tous les documents">
+        <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-1 w-64">
+            
+            <!-- Global Option -->
+            <a href="#" data-nav-filter="" class="nav-item flex items-center px-3 py-2 text-slate-200 bg-blue-600/20 text-blue-400 rounded-md group font-medium transition mb-3" title="Tous les documents">
                 <i class="fa-solid fa-folder-tree w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">Tous les documents</span>
-            </a>
-            <a href="#" data-nav-filter="exigences_generales" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§4. Exigences Générales">
-                <i class="fa-solid fa-user-shield w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">§4. Exigences Générales</span>
-            </a>
-            <a href="#" data-nav-filter="structure" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§5. Structure Organisationnelle">
-                <i class="fa-solid fa-sitemap w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">§5. Structure Organisationnelle</span>
-            </a>
-            <a href="#" data-nav-filter="ressources" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§6. Ressources (Équipements)">
-                <i class="fa-solid fa-microscope w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">§6. Ressources (Équipements)</span>
-            </a>
-            <a href="#" data-nav-filter="processus" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§7. Exigences de Processus">
-                <i class="fa-solid fa-flask-vial w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">§7. Exigences de Processus</span>
-            </a>
-            <a href="#" data-nav-filter="management" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§8. Système de Management">
-                <i class="fa-solid fa-gears w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">§8. Système de Management</span>
+                <span class="truncate ml-3">Tous les documents</span>
             </a>
 
-            <div class="pt-4 px-3 pb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider sidebar-label truncate">
+            <!-- PROCESSUS DE PILOTAGE -->
+            <div class="pt-2 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
+                Processus de Pilotage
+            </div>
+            <a href="#" data-nav-filter="P1" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P1 - Planifier, organiser et communiquer">
+                <i class="fa-solid fa-compass w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">P1.</strong> Planifier, organiser & comm.</span>
+            </a>
+            <a href="#" data-nav-filter="P2" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P2 - Maîtriser les documents, enregistrements et documents externes">
+                <i class="fa-solid fa-file-signature w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">P2.</strong> Maîtriser les documents</span>
+            </a>
+            <a href="#" data-nav-filter="P3" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P3 - Écouter les clients">
+                <i class="fa-solid fa-user-group w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">P3.</strong> Écouter les clients</span>
+            </a>
+            <a href="#" data-nav-filter="P4" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P4 - Gérer et améliorer le système de management">
+                <i class="fa-solid fa-chart-line w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">P4.</strong> Gérer & améliorer le SMQ</span>
+            </a>
+
+            <!-- PROCESSUS DE RÉALISATION -->
+            <div class="pt-3 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
+                Processus de Réalisation
+            </div>
+            <a href="#" data-nav-filter="R1" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="R1 - Préparer les objets d'essai">
+                <i class="fa-solid fa-boxes-packing w-5 text-center shrink-0 text-slate-500 group-hover:text-emerald-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">R1.</strong> Préparer les objets d'essai</span>
+            </a>
+            <a href="#" data-nav-filter="R2" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="R2 - Réaliser les essais">
+                <i class="fa-solid fa-flask-vial w-5 text-center shrink-0 text-slate-500 group-hover:text-emerald-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">R2.</strong> Réaliser les essais</span>
+            </a>
+            <a href="#" data-nav-filter="R3" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="R3 - Rédiger les rapports d'essai">
+                <i class="fa-solid fa-file-lines w-5 text-center shrink-0 text-slate-500 group-hover:text-emerald-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">R3.</strong> Rédiger les rapports d'essai</span>
+            </a>
+
+            <!-- PROCESSUS DE SUPPORT -->
+            <div class="pt-3 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
+                Processus de Support
+            </div>
+            <a href="#" data-nav-filter="S1" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S1 - Gérer les incertitudes et la qualité des résultats">
+                <i class="fa-solid fa-calculator w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">S1.</strong> Incertitudes & Qualité</span>
+            </a>
+            <a href="#" data-nav-filter="S2" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S2 - Gérer le parc des instruments de mesure">
+                <i class="fa-solid fa-microscope w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">S2.</strong> Instruments de mesure</span>
+            </a>
+            <a href="#" data-nav-filter="S3" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S3 - Gérer les ressources humaines">
+                <i class="fa-solid fa-users-gear w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">S3.</strong> Ressources Humaines</span>
+            </a>
+            <a href="#" data-nav-filter="S4" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S4 - Gérer les achats et les approvisionnements">
+                <i class="fa-solid fa-cart-shopping w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">S4.</strong> Achats & Approvisionnements</span>
+            </a>
+            <a href="#" data-nav-filter="S5" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S5 - Gérer la maintenance">
+                <i class="fa-solid fa-wrench w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">S5.</strong> Gérer la maintenance</span>
+            </a>
+            <a href="#" data-nav-filter="S6" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S6 - Gérer le système d'information">
+                <i class="fa-solid fa-server w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
+                <span class="truncate ml-3"><strong class="text-slate-300">S6.</strong> Système d'Information</span>
+            </a>
+
+            <!-- ORIGINE DOCUMENTAIRE -->
+            <div class="pt-3 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
                 Origine Documentaire
             </div>
-            <a href="#" data-nav-type="interne" class="nav-type flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="Documents Internes">
+            <a href="#" data-nav-type="interne" class="nav-type flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="Documents Internes">
                 <i class="fa-solid fa-file-contract w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">Documents Internes</span>
+                <span class="truncate ml-3">Documents Internes</span>
             </a>
-            <a href="#" data-nav-type="externe" class="nav-type flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="Documents Externes">
+            <a href="#" data-nav-type="externe" class="nav-type flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="Documents Externes">
                 <i class="fa-solid fa-book-bookmark w-5 text-center shrink-0"></i>
-                <span class="sidebar-text truncate ml-3">Documents Externes</span>
+                <span class="truncate ml-3">Documents Externes</span>
             </a>
         </nav>
 
         <!-- User Footer -->
-        <div class="p-3 border-t border-slate-800 flex items-center space-x-3 shrink-0">
+        <div class="p-3 border-t border-slate-800 flex items-center space-x-3 shrink-0 w-64">
             <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 shrink-0">
                 RQ
             </div>
-            <div class="overflow-hidden sidebar-text">
+            <div class="overflow-hidden">
                 <p class="text-xs font-medium text-slate-200 truncate">Responsable Qualité</p>
                 <p class="text-[10px] text-slate-500 truncate">labo-17025@domain.com</p>
             </div>
@@ -88,15 +135,22 @@
         
         <!-- HEADER / NAVBAR -->
         <header class="h-14 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 z-10 shrink-0">
-            <!-- Global Search Bar -->
-            <div class="flex-1 max-w-2xl relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <input type="text" id="global-search" placeholder="Rechercher par code, titre, rédacteur... (Appuyez sur '/' pour cibler)"
-                    class="w-full pl-9 pr-12 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm">
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <kbd class="px-1.5 py-0.5 text-[10px] bg-slate-800 text-slate-400 border border-slate-700 rounded font-mono">/</kbd>
+            <!-- Bouton pour afficher la barre quand elle est masquée -->
+            <div class="flex items-center space-x-3">
+                <button id="btn-reveal-sidebar" class="hidden text-slate-400 hover:text-white p-2 rounded bg-slate-950 border border-slate-800 focus:outline-none transition" title="Afficher la barre (Ctrl+B)">
+                    <i class="fa-solid fa-bars text-sm"></i>
+                </button>
+
+                <!-- Global Search Bar -->
+                <div class="w-96 relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <input type="text" id="global-search" placeholder="Rechercher par code, titre, pilote... (Appuyez sur '/' pour cibler)"
+                        class="w-full pl-9 pr-12 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <kbd class="px-1.5 py-0.5 text-[10px] bg-slate-800 text-slate-400 border border-slate-700 rounded font-mono">/</kbd>
+                    </div>
                 </div>
             </div>
 
@@ -179,7 +233,6 @@
     <!-- SLIDE-OVER DETAIL DRAWER -->
     <div id="drawer-overlay" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-30 hidden transition-opacity"></div>
     <aside id="detail-drawer" class="fixed top-0 right-0 h-full w-96 bg-slate-900 border-l border-slate-800 z-40 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
-        <!-- Drawer Header -->
         <div class="h-14 px-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
             <div class="flex items-center space-x-2">
                 <i class="fa-solid fa-file-shield text-blue-500"></i>
@@ -190,7 +243,6 @@
             </button>
         </div>
 
-        <!-- Drawer Content -->
         <div class="flex-1 overflow-y-auto p-4 space-y-6 text-xs">
             <div class="border-b border-slate-800 pb-3">
                 <span id="drawer-code" class="font-mono text-blue-400 font-bold text-sm">--</span>
@@ -322,42 +374,31 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE GESTION DU TOGGLE DE LA BARRE LATÉRALE -->
+    <!-- SCRIPT DE GESTION DU MASQUAGE TOTAL DE LA BARRE LATÉRALE -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.getElementById('toggle-sidebar');
-            const toggleIcon = document.getElementById('toggle-icon');
+            const revealBtn = document.getElementById('btn-reveal-sidebar');
 
             function toggleSidebar() {
-                const isCollapsed = sidebar.classList.contains('w-16');
+                const isHidden = sidebar.classList.contains('w-0');
 
-                if (isCollapsed) {
-                    // Agrandir la barre
-                    sidebar.classList.remove('w-16');
+                if (isHidden) {
+                    // Afficher la barre
+                    sidebar.classList.remove('w-0', 'border-none');
                     sidebar.classList.add('w-64');
-                    toggleIcon.classList.remove('fa-angles-right');
-                    toggleIcon.classList.add('fa-angles-left');
-
-                    document.querySelectorAll('.sidebar-text, .sidebar-label').forEach(el => {
-                        el.classList.remove('hidden');
-                    });
+                    revealBtn.classList.add('hidden');
                 } else {
-                    // Réduire la barre
+                    // Masquer complètement la barre
                     sidebar.classList.remove('w-64');
-                    sidebar.classList.add('w-16');
-                    toggleIcon.classList.remove('fa-angles-left');
-                    toggleIcon.classList.add('fa-angles-right');
-
-                    document.querySelectorAll('.sidebar-text, .sidebar-label').forEach(el => {
-                        el.classList.add('hidden');
-                    });
+                    sidebar.classList.add('w-0', 'border-none');
+                    revealBtn.classList.remove('hidden');
                 }
             }
 
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', toggleSidebar);
-            }
+            if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+            if (revealBtn) revealBtn.addEventListener('click', toggleSidebar);
 
             // Raccourci clavier Ctrl + B pour basculer la barre latérale
             window.addEventListener('keydown', (e) => {
