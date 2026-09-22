@@ -1,92 +1,65 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+/**
+ * QualiTech - Système de Gestion Documentaire ISO 17025
+ * api/documents.php - Récupération de la liste des documents (GET)
+ */
 
+// En-têtes HTTP pour réponse JSON et encodage UTF-8
 header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET');
+
+// Inclusion du fichier de connexion à la base de données ($pdo)
 require_once __DIR__ . '/../config/database.php';
 
+// Restriction : Seule la méthode GET est autorisée
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(405);
+    echo json_encode([
+        'error' => 'Méthode non autorisée. Seule la méthode GET est acceptée.'
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 try {
-    $pdo = getPDO();
+    // Requête pour extraire l'ensemble des métadonnées des documents
+    $query = "
+        SELECT 
+            id, 
+            code, 
+            title, 
+            type, 
+            process_code, 
+            version, 
+            status, 
+            process_owner, 
+            approver, 
+            effective_date, 
+            review_date, 
+            file_path, 
+            origin 
+        FROM documents 
+        ORDER BY id DESC
+    ";
 
-    $process = isset($_GET['process']) ? trim($_GET['process']) : '';
-    $type    = isset($_GET['type']) ? trim($_GET['type']) : '';
-    $status  = isset($_GET['status']) ? trim($_GET['status']) : '';
-    $origin  = isset($_GET['origin']) ? trim($_GET['origin']) : '';
-    $search  = isset($_GET['search']) ? trim($_GET['search']) : '';
-
-    $whereClauses = [];
-    $params = [];
-
-    if (!empty($process)) {
-        $whereClauses[] = "process_code = :process";
-        $params[':process'] = $process;
-    }
-
-    if (!empty($type)) {
-        $whereClauses[] = "type = :type";
-        $params[':type'] = $type;
-    }
-
-    if (!empty($status)) {
-        $whereClauses[] = "status = :status";
-        $params[':status'] = $status;
-    }
-
-    if (!empty($origin)) {
-        $whereClauses[] = "origin = :origin";
-        $params[':origin'] = $origin;
-    }
-
-    if (!empty($search)) {
-        $whereClauses[] = "(code LIKE :search OR title LIKE :search OR process_owner LIKE :search)";
-        $params[':search'] = '%' . $search . '%';
-    }
-
-    // Sélection avec calcul dynamique de l'échéance de révision
-    $sql = "SELECT d.*, 
-            DATEDIFF(d.review_date, CURDATE()) AS days_until_review
-            FROM documents d";
-
-    if (!empty($whereClauses)) {
-        $sql .= " WHERE " . implode(" AND ", $whereClauses);
-    }
-    
-    $sql .= " ORDER BY id DESC";
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
     $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Traitement pour qualifier l'état de révision
+    // Cast explicite de l'ID en entier pour le JavaScript
     foreach ($documents as &$doc) {
-        if (empty($doc['review_date'])) {
-            $doc['review_status'] = 'none';
-        } elseif ($doc['days_until_review'] < 0) {
-            $doc['review_status'] = 'overdue'; // En retard
-        } elseif ($doc['days_until_review'] <= 30) {
-            $doc['review_status'] = 'warning'; // Révision proche (<= 30 jours)
-        } else {
-            $doc['review_status'] = 'ok';
-        }
+        $doc['id'] = (int) $doc['id'];
     }
 
-    echo json_encode([
-        'status' => 'success',
-        'count'  => count($documents),
-        'data'   => $documents
-    ], JSON_UNESCAPED_UNICODE);
+    // Réponse HTTP 200 OK avec le tableau JSON
+    http_response_code(200);
+    echo json_encode($documents, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
 } catch (PDOException $e) {
+    // Gestion des erreurs de base de données
     http_response_code(500);
     echo json_encode([
-        'status'  => 'error',
-        'message' => 'Erreur SQL : ' . $e->getMessage()
-    ], JSON_UNESCAPED_UNICODE);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        'status'  => 'error',
-        'message' => 'Erreur : ' . $e->getMessage()
+        'error' => 'Erreur lors de la récupération des documents.',
+        'details' => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE);
 }
