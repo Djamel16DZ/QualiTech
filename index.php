@@ -26,9 +26,9 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
-    <!-- En-tête Principal -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30">
-        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- En-tête Principal (Plein écran) -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30 w-full">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-100 hover:bg-slate-800 p-2 rounded-lg transition" title="Masquer/Afficher le panneau latéral">
                     <i class="fa-solid fa-bars text-lg"></i>
@@ -57,14 +57,14 @@
         </div>
     </header>
 
-    <!-- Structure Principale Layout Flex -->
-    <div class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 items-start">
+    <!-- Structure Principale pleine largeur avec Sidebar épinglée à gauche -->
+    <div class="flex-1 w-full flex overflow-hidden">
 
-        <!-- Barre Latérale de Navigation Fixée à Gauche -->
-        <aside id="sidebar-nav" class="w-72 shrink-0 space-y-4 sticky top-20 self-start transition-all duration-200">
+        <!-- Barre Latérale Épinglée à Gauche -->
+        <aside id="sidebar-nav" class="w-72 shrink-0 border-r border-slate-800/80 bg-slate-900/30 p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-4rem)] transition-all duration-200">
             <!-- Navigation par Processus ISO 17025 -->
-            <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3.5 max-h-[calc(100vh-120px)] overflow-y-auto">
-                <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center justify-between px-1">
+            <div class="space-y-3">
+                <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
                     <span>Cartographie des Processus</span>
                     <i class="fa-solid fa-diagram-project text-slate-600"></i>
                 </h2>
@@ -171,8 +171,8 @@
             </div>
         </aside>
 
-        <!-- Zone Contenu Principal (S'élargit quand la sidebar est masquée) -->
-        <main class="flex-1 space-y-6 min-w-0 w-full">
+        <!-- Zone Contenu Principal (Prend toute la largeur restante) -->
+        <main class="flex-1 overflow-y-auto p-6 space-y-6 min-w-0">
 
             <!-- Grille des 5 Statistiques ISO 17025 -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -458,7 +458,7 @@
         </div>
     </div>
 
-    <!-- Script Inline pour la fonction Toggle Latérale -->
+    <!-- Script Inline pour le Toggle Fonctionnel de la Sidebar -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar-nav');
