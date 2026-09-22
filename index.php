@@ -163,8 +163,55 @@
         </header>
 
         <!-- CONTENT BODY -->
-        <main class="flex-1 overflow-hidden flex flex-col p-4 bg-slate-900">
+        <main class="flex-1 overflow-y-auto flex flex-col p-4 bg-slate-900">
             
+            <!-- BLOC STATISTIQUES ISO 17025 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <!-- Statut : En Vigueur -->
+                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">En Vigueur</p>
+                        <h3 id="stat-vigueur" class="text-2xl font-bold text-emerald-400 mt-0.5">0</h3>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-circle-check text-base"></i>
+                    </div>
+                </div>
+
+                <!-- Statut : En Révision -->
+                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">En Révision</p>
+                        <h3 id="stat-revision" class="text-2xl font-bold text-amber-400 mt-0.5">0</h3>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                        <i class="fa-solid fa-pen-to-square text-base"></i>
+                    </div>
+                </div>
+
+                <!-- Statut : Brouillons -->
+                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Brouillons</p>
+                        <h3 id="stat-brouillon" class="text-2xl font-bold text-slate-300 mt-0.5">0</h3>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400">
+                        <i class="fa-solid fa-file-pen text-base"></i>
+                    </div>
+                </div>
+
+                <!-- Statut : Périmés -->
+                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Périmés</p>
+                        <h3 id="stat-perime" class="text-2xl font-bold text-rose-400 mt-0.5">0</h3>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+                        <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                    </div>
+                </div>
+            </div>
+
             <!-- Filters Bar -->
             <div class="mb-3 flex flex-wrap gap-2 items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -193,7 +240,7 @@
             </div>
 
             <!-- MASTER CATALOG GRID TABLE -->
-            <div class="flex-1 bg-slate-950 rounded-lg border border-slate-800 overflow-hidden flex flex-col">
+            <div class="flex-1 bg-slate-950 rounded-lg border border-slate-800 overflow-hidden flex flex-col min-h-[350px]">
                 <div class="overflow-x-auto overflow-y-auto flex-1">
                     <table class="w-full text-left text-xs text-slate-300 border-collapse">
                         <thead class="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800 sticky top-0 backdrop-blur-sm z-10">
@@ -219,7 +266,7 @@
                 </div>
 
                 <!-- Footer Pagination -->
-                <div class="h-10 bg-slate-900 border-t border-slate-800 flex items-center justify-between px-4 text-xs text-slate-400">
+                <div class="h-10 bg-slate-900 border-t border-slate-800 flex items-center justify-between px-4 text-xs text-slate-400 shrink-0">
                     <div id="pagination-info">Page 1 sur 1</div>
                     <div class="flex items-center space-x-1">
                         <button id="btn-prev" class="px-2 py-1 bg-slate-800 rounded border border-slate-700 hover:bg-slate-700 text-slate-300 disabled:opacity-50" disabled>Précédent</button>
