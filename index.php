@@ -16,63 +16,63 @@
     <!-- COLLAPSIBLE SIDEBAR -->
     <aside id="sidebar" class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col transition-all duration-300 z-20 shrink-0">
         <!-- Logo & Header -->
-        <div class="h-14 flex items-center justify-between px-4 border-b border-slate-800">
+        <div class="h-14 flex items-center justify-between px-4 border-b border-slate-800 shrink-0">
             <div class="flex items-center space-x-3 overflow-hidden">
                 <div class="p-2 bg-blue-600 rounded-lg text-white font-bold text-xs shrink-0">
                     <i class="fa-solid fa-award text-base"></i>
                 </div>
-                <span id="brand-title" class="font-bold text-slate-100 truncate text-base">QualiTech <span class="text-blue-500">17025</span></span>
+                <span id="brand-title" class="font-bold text-slate-100 truncate text-base sidebar-text">QualiTech <span class="text-blue-500">17025</span></span>
             </div>
-            <button id="toggle-sidebar" class="text-slate-400 hover:text-white focus:outline-none" title="Réduire la barre (Ctrl+B)">
-                <i class="fa-solid fa-angles-left"></i>
+            <button id="toggle-sidebar" class="text-slate-400 hover:text-white p-1 rounded focus:outline-none transition" title="Réduire la barre (Ctrl+B)">
+                <i id="toggle-icon" class="fa-solid fa-angles-left text-sm"></i>
             </button>
         </div>
 
         <!-- Navigation Links -->
         <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-1">
-            <div class="px-3 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider sidebar-label">
+            <div class="px-3 pb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider sidebar-label truncate">
                 Processus ISO 17025
             </div>
-            <a href="#" data-nav-filter="" class="nav-item flex items-center px-3 py-2 text-slate-200 bg-blue-600/20 text-blue-400 rounded-md group font-medium">
-                <i class="fa-solid fa-folder-tree w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">Tous les documents</span>
+            <a href="#" data-nav-filter="" class="nav-item flex items-center px-3 py-2 text-slate-200 bg-blue-600/20 text-blue-400 rounded-md group font-medium transition" title="Tous les documents">
+                <i class="fa-solid fa-folder-tree w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">Tous les documents</span>
             </a>
-            <a href="#" data-nav-filter="exigences_generales" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group">
-                <i class="fa-solid fa-user-shield w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">§4. Exigences Générales</span>
+            <a href="#" data-nav-filter="exigences_generales" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§4. Exigences Générales">
+                <i class="fa-solid fa-user-shield w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">§4. Exigences Générales</span>
             </a>
-            <a href="#" data-nav-filter="structure" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group">
-                <i class="fa-solid fa-sitemap w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">§5. Structure Organisationnelle</span>
+            <a href="#" data-nav-filter="structure" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§5. Structure Organisationnelle">
+                <i class="fa-solid fa-sitemap w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">§5. Structure Organisationnelle</span>
             </a>
-            <a href="#" data-nav-filter="ressources" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group">
-                <i class="fa-solid fa-microscope w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">§6. Ressources (Équipements)</span>
+            <a href="#" data-nav-filter="ressources" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§6. Ressources (Équipements)">
+                <i class="fa-solid fa-microscope w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">§6. Ressources (Équipements)</span>
             </a>
-            <a href="#" data-nav-filter="processus" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group">
-                <i class="fa-solid fa-flask-vial w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">§7. Exigences de Processus</span>
+            <a href="#" data-nav-filter="processus" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§7. Exigences de Processus">
+                <i class="fa-solid fa-flask-vial w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">§7. Exigences de Processus</span>
             </a>
-            <a href="#" data-nav-filter="management" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group">
-                <i class="fa-solid fa-gears w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">§8. Système de Management</span>
+            <a href="#" data-nav-filter="management" class="nav-item flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="§8. Système de Management">
+                <i class="fa-solid fa-gears w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">§8. Système de Management</span>
             </a>
 
-            <div class="pt-4 px-3 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider sidebar-label">
+            <div class="pt-4 px-3 pb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider sidebar-label truncate">
                 Origine Documentaire
             </div>
-            <a href="#" data-nav-type="interne" class="nav-type flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group">
-                <i class="fa-solid fa-file-contract w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">Documents Internes</span>
+            <a href="#" data-nav-type="interne" class="nav-type flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="Documents Internes">
+                <i class="fa-solid fa-file-contract w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">Documents Internes</span>
             </a>
-            <a href="#" data-nav-type="externe" class="nav-type flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group">
-                <i class="fa-solid fa-book-bookmark w-5 text-center mr-3"></i>
-                <span class="sidebar-text truncate">Documents Externes</span>
+            <a href="#" data-nav-type="externe" class="nav-type flex items-center px-3 py-2 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition" title="Documents Externes">
+                <i class="fa-solid fa-book-bookmark w-5 text-center shrink-0"></i>
+                <span class="sidebar-text truncate ml-3">Documents Externes</span>
             </a>
         </nav>
 
         <!-- User Footer -->
-        <div class="p-3 border-t border-slate-800 flex items-center space-x-3">
+        <div class="p-3 border-t border-slate-800 flex items-center space-x-3 shrink-0">
             <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 shrink-0">
                 RQ
             </div>
@@ -87,13 +87,13 @@
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         
         <!-- HEADER / NAVBAR -->
-        <header class="h-14 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 z-10">
+        <header class="h-14 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 z-10 shrink-0">
             <!-- Global Search Bar -->
             <div class="flex-1 max-w-2xl relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
-                <input type="text" id="global-search" placeholder="Rechercher par code (ex: PR-QUAL-001), titre, rédacteur... (Appuyez sur '/' pour cibler)"
+                <input type="text" id="global-search" placeholder="Rechercher par code, titre, rédacteur... (Appuyez sur '/' pour cibler)"
                     class="w-full pl-9 pr-12 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm">
                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <kbd class="px-1.5 py-0.5 text-[10px] bg-slate-800 text-slate-400 border border-slate-700 rounded font-mono">/</kbd>
@@ -102,7 +102,7 @@
 
             <!-- Top Actions -->
             <div class="flex items-center space-x-3 ml-4">
-                <button id="btn-open-modal" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md font-medium text-xs flex items-center transition">
+                <button id="btn-open-modal" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md font-medium text-xs flex items-center transition shadow-lg shadow-blue-600/20">
                     <i class="fa-solid fa-plus mr-1.5"></i> Nouveau Document
                 </button>
             </div>
@@ -155,7 +155,6 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/60" id="document-table-body">
-                            <!-- Injected dynamically via assets/js/app.js -->
                             <tr>
                                 <td colspan="8" class="p-6 text-center text-slate-500">
                                     <i class="fa-solid fa-spinner fa-spin mr-2"></i> Chargement des documents qualité...
@@ -193,13 +192,11 @@
 
         <!-- Drawer Content -->
         <div class="flex-1 overflow-y-auto p-4 space-y-6 text-xs">
-            <!-- Document Header Title -->
             <div class="border-b border-slate-800 pb-3">
                 <span id="drawer-code" class="font-mono text-blue-400 font-bold text-sm">--</span>
                 <h3 id="drawer-title" class="font-semibold text-slate-100 text-base mt-1">Sélectionnez un document</h3>
             </div>
 
-            <!-- Metadata List -->
             <div class="space-y-3">
                 <div class="grid grid-cols-2 gap-2">
                     <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
@@ -235,7 +232,6 @@
                 </div>
             </div>
 
-            <!-- Download / Action Button -->
             <div class="pt-2">
                 <a href="#" id="drawer-download" target="_blank" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium flex items-center justify-center space-x-2 transition opacity-50 cursor-not-allowed">
                     <i class="fa-solid fa-file-pdf"></i>
@@ -326,6 +322,52 @@
         </div>
     </div>
 
+    <!-- SCRIPT DE GESTION DU TOGGLE DE LA BARRE LATÉRALE -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggle-sidebar');
+            const toggleIcon = document.getElementById('toggle-icon');
+
+            function toggleSidebar() {
+                const isCollapsed = sidebar.classList.contains('w-16');
+
+                if (isCollapsed) {
+                    // Agrandir la barre
+                    sidebar.classList.remove('w-16');
+                    sidebar.classList.add('w-64');
+                    toggleIcon.classList.remove('fa-angles-right');
+                    toggleIcon.classList.add('fa-angles-left');
+
+                    document.querySelectorAll('.sidebar-text, .sidebar-label').forEach(el => {
+                        el.classList.remove('hidden');
+                    });
+                } else {
+                    // Réduire la barre
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-16');
+                    toggleIcon.classList.remove('fa-angles-left');
+                    toggleIcon.classList.add('fa-angles-right');
+
+                    document.querySelectorAll('.sidebar-text, .sidebar-label').forEach(el => {
+                        el.classList.add('hidden');
+                    });
+                }
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', toggleSidebar);
+            }
+
+            // Raccourci clavier Ctrl + B pour basculer la barre latérale
+            window.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+                    e.preventDefault();
+                    toggleSidebar();
+                }
+            });
+        });
+    </script>
     <script src="assets/js/app.js"></script>
 </body>
 </html>
