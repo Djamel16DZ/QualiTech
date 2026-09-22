@@ -1,0 +1,16 @@
+/* Adaptation visuelle pour QualiTech 17025 */
+body {
+user-select: none;
+}
+
+/* Fluid transition pour le tiroir de détails */
+#detail-drawer {
+will-change: transform;
+}
+
+/* Style d'impression au besoin */
+@media print {
+#sidebar, #detail-drawer, header {
+display: none !important;
+}
+}
