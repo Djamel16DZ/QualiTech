@@ -60,7 +60,7 @@
     <!-- Zone principale : Hauteur exacte du viewport restant (100vh - 4rem) -->
     <div class="flex-1 w-full flex h-[calc(100vh-4rem)] overflow-hidden">
 
-        <!-- Barre Latérale : Épinglée à 100% de la hauteur, scroll uniquement sur elle-même si nécessaire -->
+        <!-- Barre Latérale : Épinglée à 100% de la hauteur -->
         <aside id="sidebar-nav" class="w-72 shrink-0 border-r border-slate-800/80 bg-slate-900/30 p-4 space-y-4 overflow-y-auto h-full transition-all duration-200">
             <div class="space-y-3">
                 <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
@@ -168,7 +168,7 @@
             </div>
         </aside>
 
-        <!-- Zone de Contenu Principal (seule zone avec défilement vertical) -->
+        <!-- Zone de Contenu Principal -->
         <main class="flex-1 overflow-y-auto p-6 space-y-6 h-full min-w-0">
 
             <!-- Statistiques -->
@@ -252,7 +252,7 @@
                 </div>
             </div>
 
-            <!-- Tableau Fixe avec gestion Strict du Troncage (table-fixed) -->
+            <!-- Tableau Fixe avec gestion Strict du Troncage -->
             <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl overflow-hidden shadow-xl flex flex-col">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-slate-300 table-fixed">
@@ -291,22 +291,194 @@
         </main>
     </div>
 
-    <!-- Modale & Drawer inchangés -->
+    <!-- MODALE : CRÉATION DE DOCUMENT -->
     <div id="modal-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <!-- Formulaire de création -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-file-circle-plus text-blue-400"></i>
+                    <h3 class="font-semibold text-slate-100 text-sm">Ajouter un nouveau document ISO 17025</h3>
+                </div>
+                <button id="close-modal" class="text-slate-400 hover:text-slate-200 text-lg p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="add-document-form" enctype="multipart/form-data" class="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Code Document *</label>
+                        <input type="text" name="code" required placeholder="ex: PROC-TECH-001" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Processus Qualité *</label>
+                        <select name="process_code" required class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                            <option value="P1">P1 - Planifier, organiser et communiquer</option>
+                            <option value="P2">P2 - Maîtriser les documents</option>
+                            <option value="P3">P3 - Écouter les clients</option>
+                            <option value="P4">P4 - Gérer et améliorer le système</option>
+                            <option value="R1">R1 - Préparer les objets d'essai</option>
+                            <option value="R2">R2 - Réaliser les essais</option>
+                            <option value="R3">R3 - Rédiger les rapports</option>
+                            <option value="S1">S1 - Incertitudes et qualité</option>
+                            <option value="S2">S2 - Instruments de mesure</option>
+                            <option value="S3">S3 - Ressources humaines</option>
+                            <option value="S4">S4 - Achats et approvisionnements</option>
+                            <option value="S5">S5 - Maintenance</option>
+                            <option value="S6">S6 - Système d'information</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Titre du Document *</label>
+                    <input type="text" name="title" required placeholder="ex: Procédure d'étalonnage des balances" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Type *</label>
+                        <select name="type" required class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                            <option value="procedure">Procédure</option>
+                            <option value="mode_operatoire">Mode Opératoire</option>
+                            <option value="formulaire">Formulaire</option>
+                            <option value="manuel">Manuel</option>
+                            <option value="politique">Politique</option>
+                            <option value="externe">Doc. Externe</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Version *</label>
+                        <input type="text" name="version" value="01" required placeholder="01" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 font-mono focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Statut *</label>
+                        <select name="status" required class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                            <option value="brouillon">Brouillon</option>
+                            <option value="en_vigueur">En Vigueur</option>
+                            <option value="en_revision">En Révision</option>
+                            <option value="perime">Périmé</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Pilote / Process Owner</label>
+                        <input type="text" name="process_owner" placeholder="ex: Dr. Benali" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Approbateur</label>
+                        <input type="text" name="approver" placeholder="ex: Responsable Qualité" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Date d'application</label>
+                        <input type="date" name="effective_date" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Date de révision prévisionnelle</label>
+                        <input type="date" name="review_date" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Origine</label>
+                    <select name="origin" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                        <option value="interne">Interne</option>
+                        <option value="externe">Externe</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Fichier PDF associé</label>
+                    <input type="file" name="file" accept=".pdf" class="w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+                </div>
+
+                <div class="pt-4 border-t border-slate-800 flex justify-end gap-3">
+                    <button type="button" id="btn-cancel-modal" class="px-4 py-2 rounded-lg font-medium text-slate-400 hover:bg-slate-800 transition">Annuler</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg font-medium bg-blue-600 hover:bg-blue-500 text-white transition flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
+    <!-- TIROIR LATÉRAL (DRAWER) DE CONSULTATION -->
     <div id="drawer-overlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden"></div>
-    <div id="detail-drawer" class="fixed top-0 right-0 bottom-0 w-96 bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between">
-        <!-- Contenu Drawer -->
+    
+    <div id="detail-drawer" class="fixed top-0 right-0 bottom-0 w-96 bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between shadow-2xl">
+        <div class="space-y-6 overflow-y-auto flex-1 pr-1">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-circle-info text-blue-400"></i>
+                    <h3 class="font-semibold text-slate-100 text-sm">Fiche Documentaire</h3>
+                </div>
+                <button id="close-drawer" class="text-slate-400 hover:text-slate-200 text-lg p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div>
+                <span id="drawer-code" class="font-mono text-xs text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded">--</span>
+                <h2 id="drawer-title" class="text-base font-bold text-slate-100 mt-2">--</h2>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 text-xs">
+                <div>
+                    <span class="text-[10px] text-slate-400 block uppercase">Statut Actuel</span>
+                    <div id="drawer-status" class="mt-1">--</div>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 block uppercase">Version</span>
+                    <span id="drawer-version" class="font-mono text-slate-200 mt-1 block font-semibold">--</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-xs bg-slate-950/40 p-3.5 rounded-xl border border-slate-800/60">
+                <div class="flex justify-between border-b border-slate-800/60 pb-2">
+                    <span class="text-slate-400">Pilote du Processus :</span>
+                    <span id="drawer-owner" class="text-slate-200 font-medium">--</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-800/60 pb-2">
+                    <span class="text-slate-400">Approbateur :</span>
+                    <span id="drawer-approver" class="text-slate-200 font-medium">--</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-800/60 pb-2">
+                    <span class="text-slate-400">Date d'application :</span>
+                    <span id="drawer-effective" class="font-mono text-slate-300">--</span>
+                </div>
+                <div class="flex justify-between pb-1">
+                    <span class="text-slate-400">Prochaine révision :</span>
+                    <span id="drawer-review" class="font-mono text-slate-300">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800">
+            <a id="drawer-pdf-link" href="#" target="_blank" class="w-full py-2.5 bg-rose-600/10 hover:bg-rose-600/20 text-rose-400 border border-rose-500/30 rounded-xl font-medium text-xs transition flex items-center justify-center gap-2 hidden">
+                <i class="fa-solid fa-file-pdf"></i> Ouvrir le document PDF
+            </a>
+        </div>
     </div>
 
+    <!-- Script de bascule de la barre latérale -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar-nav');
             if (sidebar) sidebar.classList.toggle('hidden');
         }
     </script>
+    <!-- Script principal de l'application -->
     <script src="assets/js/app.js"></script>
 </body>
 </html>

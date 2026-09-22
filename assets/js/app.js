@@ -350,7 +350,7 @@ function initEvents() {
     const btnOpenModal = document.getElementById('btn-open-modal') || document.getElementById('btn-new-document');
     const btnCloseModal = document.getElementById('close-modal') || document.getElementById('close-modal-btn');
     const btnCancelModal = document.getElementById('btn-cancel-modal') || document.getElementById('cancel-modal-btn');
-    const modalOverlay = document.getElementById('modal-overlay');
+    const modalOverlay = document.getElementById('modal-overlay') || document.getElementById('add-document-modal');
 
     if (btnOpenModal) btnOpenModal.addEventListener('click', () => modalOverlay?.classList.remove('hidden'));
     if (btnCloseModal) btnCloseModal.addEventListener('click', () => modalOverlay?.classList.add('hidden'));
@@ -439,10 +439,12 @@ function setElText(id, txt) {
 
 async function handleFormSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const form = e.target;
+    const formData = new FormData(form);
 
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn ? submitBtn.innerHTML : '';
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Enregistrer';
+
     if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Enregistrement...';
@@ -454,18 +456,31 @@ async function handleFormSubmit(e) {
             body: formData
         });
 
-        const result = await response.json();
+        const contentType = response.headers.get('content-type');
+        let result = {};
+
+        if (contentType && contentType.includes('application/json')) {
+            result = await response.json();
+        } else {
+            const rawText = await response.text();
+            throw new Error(`Le serveur PHP renvoie un format invalide : ${rawText.substring(0, 150)}`);
+        }
 
         if (response.ok && result.success) {
             await loadDocuments();
-            e.target.reset();
-            document.getElementById('modal-overlay')?.classList.add('hidden');
+            form.reset();
+            
+            // Fermeture de la modale quel que soit son identifiant
+            const modalOverlay = document.getElementById('modal-overlay') || document.getElementById('add-document-modal');
+            if (modalOverlay) modalOverlay.classList.add('hidden');
+
+            alert('Document enregistré avec succès !');
         } else {
             alert(result.error || 'Erreur lors de la création du document.');
         }
     } catch (error) {
         console.error('Erreur lors de la soumission :', error);
-        alert('Erreur de connexion réseau avec le serveur PHP.');
+        alert(`Erreur d'envoi : ${error.message}`);
     } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
