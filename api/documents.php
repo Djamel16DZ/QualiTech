@@ -1,19 +1,14 @@
 <?php
-// Activer l'affichage direct des erreurs PHP pour le débogage
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 header('Content-Type: application/json; charset=utf-8');
-
-// Inclusion du fichier de configuration DB
 require_once __DIR__ . '/../config/database.php';
 
 try {
-    // Obtenir la connexion PDO via la fonction getPDO()
     $pdo = getPDO();
 
-    // Récupération des filtres depuis l'URL
     $process = isset($_GET['process']) ? trim($_GET['process']) : '';
     $type    = isset($_GET['type']) ? trim($_GET['type']) : '';
     $status  = isset($_GET['status']) ? trim($_GET['status']) : '';
@@ -48,7 +43,11 @@ try {
         $params[':search'] = '%' . $search . '%';
     }
 
-    $sql = "SELECT * FROM documents";
+    // Sélection avec calcul dynamique de l'échéance de révision
+    $sql = "SELECT d.*, 
+            DATEDIFF(d.review_date, CURDATE()) AS days_until_review
+            FROM documents d";
+
     if (!empty($whereClauses)) {
         $sql .= " WHERE " . implode(" AND ", $whereClauses);
     }
@@ -57,7 +56,20 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    $documents = $stmt->fetchAll();
+    $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Traitement pour qualifier l'état de révision
+    foreach ($documents as &$doc) {
+        if (empty($doc['review_date'])) {
+            $doc['review_status'] = 'none';
+        } elseif ($doc['days_until_review'] < 0) {
+            $doc['review_status'] = 'overdue'; // En retard
+        } elseif ($doc['days_until_review'] <= 30) {
+            $doc['review_status'] = 'warning'; // Révision proche (<= 30 jours)
+        } else {
+            $doc['review_status'] = 'ok';
+        }
+    }
 
     echo json_encode([
         'status' => 'success',

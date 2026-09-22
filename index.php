@@ -1,232 +1,256 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full bg-slate-900 text-slate-100">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QualiTech 17025 — Gestion Documentaire Qualité</title>
+    <title>QualiTech - Système de Gestion Documentaire ISO 17025</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome 6 CDN -->
+    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#111827',
+                            950: '#0b0f19'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="h-full flex overflow-hidden font-sans antialiased text-sm">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
-    <!-- COLLAPSIBLE SIDEBAR (Masquage total w-0) -->
-    <aside id="sidebar" class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col transition-all duration-300 z-20 shrink-0 overflow-hidden">
-        <!-- Logo & Header -->
-        <div class="h-14 flex items-center justify-between px-4 border-b border-slate-800 shrink-0 w-64">
-            <div class="flex items-center space-x-3 overflow-hidden">
-                <div class="p-2 bg-blue-600 rounded-lg text-white font-bold text-xs shrink-0">
-                    <i class="fa-solid fa-award text-base"></i>
-                </div>
-                <span id="brand-title" class="font-bold text-slate-100 truncate text-base">QualiTech <span class="text-blue-500">17025</span></span>
-            </div>
-            <button id="toggle-sidebar" class="text-slate-400 hover:text-white p-1 rounded focus:outline-none transition" title="Masquer la barre (Ctrl+B)">
-                <i class="fa-solid fa-angles-left text-sm"></i>
-            </button>
-        </div>
-
-        <!-- Navigation Links -->
-        <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-1 w-64">
-            
-            <!-- Global Option -->
-            <a href="#" data-nav-filter="" class="nav-item flex items-center px-3 py-2 text-slate-200 bg-blue-600/20 text-blue-400 rounded-md group font-medium transition mb-3" title="Tous les documents">
-                <i class="fa-solid fa-folder-tree w-5 text-center shrink-0"></i>
-                <span class="truncate ml-3">Tous les documents</span>
-            </a>
-
-            <!-- PROCESSUS DE PILOTAGE -->
-            <div class="pt-2 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
-                Processus de Pilotage
-            </div>
-            <a href="#" data-nav-filter="P1" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P1 - Planifier, organiser et communiquer">
-                <i class="fa-solid fa-compass w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">P1.</strong> Planifier, organiser & comm.</span>
-            </a>
-            <a href="#" data-nav-filter="P2" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P2 - Maîtriser les documents, enregistrements et documents externes">
-                <i class="fa-solid fa-file-signature w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">P2.</strong> Maîtriser les documents</span>
-            </a>
-            <a href="#" data-nav-filter="P3" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P3 - Écouter les clients">
-                <i class="fa-solid fa-user-group w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">P3.</strong> Écouter les clients</span>
-            </a>
-            <a href="#" data-nav-filter="P4" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="P4 - Gérer et améliorer le système de management">
-                <i class="fa-solid fa-chart-line w-5 text-center shrink-0 text-slate-500 group-hover:text-blue-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">P4.</strong> Gérer & améliorer le SMQ</span>
-            </a>
-
-            <!-- PROCESSUS DE RÉALISATION -->
-            <div class="pt-3 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
-                Processus de Réalisation
-            </div>
-            <a href="#" data-nav-filter="R1" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="R1 - Préparer les objets d'essai">
-                <i class="fa-solid fa-boxes-packing w-5 text-center shrink-0 text-slate-500 group-hover:text-emerald-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">R1.</strong> Préparer les objets d'essai</span>
-            </a>
-            <a href="#" data-nav-filter="R2" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="R2 - Réaliser les essais">
-                <i class="fa-solid fa-flask-vial w-5 text-center shrink-0 text-slate-500 group-hover:text-emerald-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">R2.</strong> Réaliser les essais</span>
-            </a>
-            <a href="#" data-nav-filter="R3" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="R3 - Rédiger les rapports d'essai">
-                <i class="fa-solid fa-file-lines w-5 text-center shrink-0 text-slate-500 group-hover:text-emerald-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">R3.</strong> Rédiger les rapports d'essai</span>
-            </a>
-
-            <!-- PROCESSUS DE SUPPORT -->
-            <div class="pt-3 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
-                Processus de Support
-            </div>
-            <a href="#" data-nav-filter="S1" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S1 - Gérer les incertitudes et la qualité des résultats">
-                <i class="fa-solid fa-calculator w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">S1.</strong> Incertitudes & Qualité</span>
-            </a>
-            <a href="#" data-nav-filter="S2" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S2 - Gérer le parc des instruments de mesure">
-                <i class="fa-solid fa-microscope w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">S2.</strong> Instruments de mesure</span>
-            </a>
-            <a href="#" data-nav-filter="S3" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S3 - Gérer les ressources humaines">
-                <i class="fa-solid fa-users-gear w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">S3.</strong> Ressources Humaines</span>
-            </a>
-            <a href="#" data-nav-filter="S4" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S4 - Gérer les achats et les approvisionnements">
-                <i class="fa-solid fa-cart-shopping w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">S4.</strong> Achats & Approvisionnements</span>
-            </a>
-            <a href="#" data-nav-filter="S5" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S5 - Gérer la maintenance">
-                <i class="fa-solid fa-wrench w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">S5.</strong> Gérer la maintenance</span>
-            </a>
-            <a href="#" data-nav-filter="S6" class="nav-item flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="S6 - Gérer le système d'information">
-                <i class="fa-solid fa-server w-5 text-center shrink-0 text-slate-500 group-hover:text-amber-400"></i>
-                <span class="truncate ml-3"><strong class="text-slate-300">S6.</strong> Système d'Information</span>
-            </a>
-
-            <!-- ORIGINE DOCUMENTAIRE -->
-            <div class="pt-3 px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">
-                Origine Documentaire
-            </div>
-            <a href="#" data-nav-type="interne" class="nav-type flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="Documents Internes">
-                <i class="fa-solid fa-file-contract w-5 text-center shrink-0"></i>
-                <span class="truncate ml-3">Documents Internes</span>
-            </a>
-            <a href="#" data-nav-type="externe" class="nav-type flex items-center px-3 py-1.5 text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 rounded-md group transition text-xs" title="Documents Externes">
-                <i class="fa-solid fa-book-bookmark w-5 text-center shrink-0"></i>
-                <span class="truncate ml-3">Documents Externes</span>
-            </a>
-        </nav>
-
-        <!-- User Footer -->
-        <div class="p-3 border-t border-slate-800 flex items-center space-x-3 shrink-0 w-64">
-            <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300 shrink-0">
-                RQ
-            </div>
-            <div class="overflow-hidden">
-                <p class="text-xs font-medium text-slate-200 truncate">Responsable Qualité</p>
-                <p class="text-[10px] text-slate-500 truncate">labo-17025@domain.com</p>
-            </div>
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT AREA -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        
-        <!-- HEADER / NAVBAR -->
-        <header class="h-14 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 z-10 shrink-0">
-            <!-- Bouton pour afficher la barre quand elle est masquée -->
+    <!-- En-tête Principal -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <button id="btn-reveal-sidebar" class="hidden text-slate-400 hover:text-white p-2 rounded bg-slate-950 border border-slate-800 focus:outline-none transition" title="Afficher la barre (Ctrl+B)">
-                    <i class="fa-solid fa-bars text-sm"></i>
+                <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-100 hover:bg-slate-800 p-2 rounded-lg transition" title="Masquer/Afficher le panneau latéral">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </button>
-
-                <!-- Global Search Bar -->
-                <div class="w-96 relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                    <input type="text" id="global-search" placeholder="Rechercher par code, titre, pilote... (Appuyez sur '/' pour cibler)"
-                        class="w-full pl-9 pr-12 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm">
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <kbd class="px-1.5 py-0.5 text-[10px] bg-slate-800 text-slate-400 border border-slate-700 rounded font-mono">/</kbd>
-                    </div>
+                <div class="bg-blue-600/20 border border-blue-500/30 p-2 rounded-lg text-blue-400">
+                    <i class="fa-solid fa-flask-vial text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-100 leading-tight">QualiTech <span class="text-xs font-normal text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded ml-2">ISO 17025</span></h1>
+                    <p class="text-xs text-slate-400">Gestion Documentaire & Traçabilité Qualité</p>
                 </div>
             </div>
 
-            <!-- Top Actions -->
-            <div class="flex items-center space-x-3 ml-4">
-                <button id="btn-open-modal" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-md font-medium text-xs flex items-center transition shadow-lg shadow-blue-600/20">
-                    <i class="fa-solid fa-plus mr-1.5"></i> Nouveau Document
+            <!-- Recherche globale & Action rapide -->
+            <div class="flex items-center space-x-4">
+                <div class="relative w-64 md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="text" id="global-search" placeholder="Rechercher code, titre, pilote... (/)" 
+                           class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
+                </div>
+                <button id="btn-open-modal" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg font-medium flex items-center space-x-2 transition shadow-lg shadow-blue-600/20 whitespace-nowrap">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Nouveau Document</span>
                 </button>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- CONTENT BODY -->
-        <main class="flex-1 overflow-y-auto flex flex-col p-4 bg-slate-900">
-            
-            <!-- BLOC STATISTIQUES ISO 17025 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                <!-- Statut : En Vigueur -->
-                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+    <!-- Structure Principale Layout Flex -->
+    <div class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 items-start">
+
+        <!-- Barre Latérale de Navigation Fixée à Gauche -->
+        <aside id="sidebar-nav" class="w-72 shrink-0 space-y-4 sticky top-20 self-start transition-all duration-200">
+            <!-- Navigation par Processus ISO 17025 -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3.5 max-h-[calc(100vh-120px)] overflow-y-auto">
+                <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center justify-between px-1">
+                    <span>Cartographie des Processus</span>
+                    <i class="fa-solid fa-diagram-project text-slate-600"></i>
+                </h2>
+                
+                <nav class="space-y-3 text-xs">
+                    <!-- Option Tous -->
+                    <a href="#" class="nav-item flex items-center justify-between px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-800 transition bg-slate-800/60 font-medium" data-nav-filter="">
+                        <span>Tous les processus</span>
+                        <i class="fa-solid fa-layer-group text-[10px] text-slate-500"></i>
+                    </a>
+
+                    <!-- 1. Processus de Pilotage -->
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">En Vigueur</p>
+                        <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider px-2 block mb-1">Processus de Pilotage</span>
+                        <div class="space-y-0.5">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P1">
+                                <span class="truncate pr-2">P1 - Planifier, organiser et communiquer</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P1</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P2">
+                                <span class="truncate pr-2">P2 - Maîtriser les documents, enregistrements et docs ext.</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P2</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P3">
+                                <span class="truncate pr-2">P3 - Écouter les clients</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P3</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P4">
+                                <span class="truncate pr-2">P4 - Gérer et améliorer le système de management</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P4</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 2. Processus de Réalisation -->
+                    <div>
+                        <span class="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider px-2 block mb-1">Processus de Réalisation</span>
+                        <div class="space-y-0.5">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R1">
+                                <span class="truncate pr-2">R1 - Préparer les objets d'essai</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">R1</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R2">
+                                <span class="truncate pr-2">R2 - Réaliser les essais</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">R2</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R3">
+                                <span class="truncate pr-2">R3 - Rédiger les rapports d'essai</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">R3</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 3. Processus de Support -->
+                    <div>
+                        <span class="text-[10px] font-semibold text-amber-400 uppercase tracking-wider px-2 block mb-1">Processus de Support</span>
+                        <div class="space-y-0.5">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S1">
+                                <span class="truncate pr-2">S1 - Gérer les incertitudes et la qualité des résultats</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S1</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S2">
+                                <span class="truncate pr-2">S2 - Gérer le parc des instruments de mesure</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S2</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S3">
+                                <span class="truncate pr-2">S3 - Gérer les ressources humaines</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S3</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S4">
+                                <span class="truncate pr-2">S4 - Gérer les achats et les approvisionnements</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S4</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S5">
+                                <span class="truncate pr-2">S5 - Gérer la maintenance</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S5</span>
+                            </a>
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S6">
+                                <span class="truncate pr-2">S6 - Gérer le système d'information</span>
+                                <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S6</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Navigation par Origine Documentaire -->
+                <div class="border-t border-slate-800/80 pt-3 mt-3">
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Origine</h3>
+                    <nav class="space-y-0.5 text-xs">
+                        <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="">
+                            <span>Toutes les origines</span>
+                            <i class="fa-solid fa-border-all text-[9px]"></i>
+                        </a>
+                        <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="interne">
+                            <span>Interne (Ged)</span>
+                            <i class="fa-solid fa-house text-[9px]"></i>
+                        </a>
+                        <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="externe">
+                            <span>Externe (Normes, Client)</span>
+                            <i class="fa-solid fa-globe text-[9px]"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Zone Contenu Principal (S'élargit quand la sidebar est masquée) -->
+        <main class="flex-1 space-y-6 min-w-0 w-full">
+
+            <!-- Grille des 5 Statistiques ISO 17025 -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                <!-- Carte 1 : En Vigueur -->
+                <div id="card-vigueur" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-emerald-500/40 cursor-pointer">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">En Vigueur</p>
                         <h3 id="stat-vigueur" class="text-2xl font-bold text-emerald-400 mt-0.5">0</h3>
                     </div>
-                    <div class="w-9 h-9 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                        <i class="fa-solid fa-circle-check text-base"></i>
+                    <div class="w-9 h-9 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                        <i class="fa-solid fa-circle-check text-sm"></i>
                     </div>
                 </div>
 
-                <!-- Statut : En Révision -->
-                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+                <!-- Carte 2 : En Révision -->
+                <div id="card-revision" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-amber-500/40 cursor-pointer">
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">En Révision</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">En Révision</p>
                         <h3 id="stat-revision" class="text-2xl font-bold text-amber-400 mt-0.5">0</h3>
                     </div>
-                    <div class="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-                        <i class="fa-solid fa-pen-to-square text-base"></i>
+                    <div class="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                        <i class="fa-solid fa-arrows-rotate text-sm"></i>
                     </div>
                 </div>
 
-                <!-- Statut : Brouillons -->
-                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+                <!-- Carte 3 : Brouillons -->
+                <div id="card-brouillon" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-slate-500/40 cursor-pointer">
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Brouillons</p>
-                        <h3 id="stat-brouillon" class="text-2xl font-bold text-slate-300 mt-0.5">0</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Brouillons</p>
+                        <h3 id="stat-brouillon" class="text-2xl font-bold text-slate-400 mt-0.5">0</h3>
                     </div>
-                    <div class="w-9 h-9 rounded-full bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400">
-                        <i class="fa-solid fa-file-pen text-base"></i>
+                    <div class="w-9 h-9 rounded-full bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400 shrink-0">
+                        <i class="fa-solid fa-pen-ruler text-sm"></i>
                     </div>
                 </div>
 
-                <!-- Statut : Périmés -->
-                <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-lg flex items-center justify-between">
+                <!-- Carte 4 : Périmés -->
+                <div id="card-perime" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-rose-500/40 cursor-pointer">
                     <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Périmés</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Périmés</p>
                         <h3 id="stat-perime" class="text-2xl font-bold text-rose-400 mt-0.5">0</h3>
                     </div>
-                    <div class="w-9 h-9 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
-                        <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                    <div class="w-9 h-9 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shrink-0">
+                        <i class="fa-solid fa-box-archive text-sm"></i>
+                    </div>
+                </div>
+
+                <!-- Carte 5 : Échéances (-30j & Dépassées) -->
+                <div id="card-alertes" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-amber-500/40 cursor-pointer">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Échéances -30j</p>
+                        <h3 id="stat-alertes" class="text-2xl font-bold text-amber-500 mt-0.5">0</h3>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 shrink-0">
+                        <i class="fa-solid fa-clock-rotate-left text-sm"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- Filters Bar -->
-            <div class="mb-3 flex flex-wrap gap-2 items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <select id="filter-type" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-md px-2.5 py-1.5 focus:outline-none focus:border-blue-500">
-                        <option value="">Tous les Types</option>
-                        <option value="politique">Politiques</option>
-                        <option value="manuel">Manuel Qualité</option>
-                        <option value="procedure">Procédures</option>
-                        <option value="mode_operatoire">Modes Opératoires</option>
-                        <option value="formulaire">Formulaires</option>
-                        <option value="externe">Documents Externes</option>
+            <!-- Zone de Filtres du Tableau -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-wrap gap-4 items-center justify-between">
+                <div class="flex items-center space-x-3 text-xs">
+                    <span class="text-slate-400 font-medium">Filtrer par :</span>
+                    
+                    <!-- Filtre Type -->
+                    <select id="filter-type" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 transition">
+                        <option value="">Tous les types</option>
+                        <option value="procedure">Procédure</option>
+                        <option value="mode_operatoire">Mode Opératoire</option>
+                        <option value="formulaire">Formulaire</option>
+                        <option value="manuel">Manuel</option>
+                        <option value="politique">Politique</option>
+                        <option value="externe">Doc. Externe</option>
                     </select>
 
-                    <select id="filter-status" class="bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-md px-2.5 py-1.5 focus:outline-none focus:border-blue-500">
-                        <option value="">Tous les Statuts</option>
+                    <!-- Filtre Statut -->
+                    <select id="filter-status" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 transition">
+                        <option value="">Tous les statuts</option>
                         <option value="en_vigueur">En Vigueur</option>
                         <option value="en_revision">En Révision</option>
                         <option value="brouillon">Brouillon</option>
@@ -235,227 +259,216 @@
                 </div>
 
                 <div class="text-xs text-slate-400">
-                    Affichage de <span id="current-count" class="font-semibold text-slate-200">0</span> sur <span id="total-count" class="font-semibold text-slate-200">0</span> documents
+                    Affichage : <span id="current-count" class="font-bold text-slate-200">0</span> / <span id="total-count" class="font-bold text-slate-200">0</span> document(s)
                 </div>
             </div>
 
-            <!-- MASTER CATALOG GRID TABLE -->
-            <div class="flex-1 bg-slate-950 rounded-lg border border-slate-800 overflow-hidden flex flex-col min-h-[350px]">
-                <div class="overflow-x-auto overflow-y-auto flex-1">
-                    <table class="w-full text-left text-xs text-slate-300 border-collapse">
-                        <thead class="bg-slate-900/90 text-slate-400 font-semibold border-b border-slate-800 sticky top-0 backdrop-blur-sm z-10">
+            <!-- Tableau Principal des Documents ISO 17025 -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950/80 text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider font-semibold">
                             <tr>
-                                <th class="p-3 w-32">Code / Réf.</th>
-                                <th class="p-3">Intitulé du Document</th>
-                                <th class="p-3 w-32">Type</th>
-                                <th class="p-3 w-20 text-center">Indice</th>
-                                <th class="p-3 w-28">Statut</th>
-                                <th class="p-3 w-36">Pilote / Rédacteur</th>
-                                <th class="p-3 w-28">Date d'effet</th>
-                                <th class="p-3 w-16 text-center">Action</th>
+                                <th class="p-3 whitespace-nowrap">Code</th>
+                                <th class="p-3 min-w-[250px]">Titre du Document</th>
+                                <th class="p-3 whitespace-nowrap">Type</th>
+                                <th class="p-3 text-center whitespace-nowrap">Ver.</th>
+                                <th class="p-3 whitespace-nowrap">Statut</th>
+                                <th class="p-3 whitespace-nowrap">Pilote</th>
+                                <th class="p-3 whitespace-nowrap">Prochaine Révision</th>
+                                <th class="p-3 text-center whitespace-nowrap">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-800/60" id="document-table-body">
+                        <tbody id="document-table-body" class="divide-y divide-slate-800/50">
+                            <!-- Rendu dynamique via app.js -->
                             <tr>
-                                <td colspan="8" class="p-6 text-center text-slate-500">
-                                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Chargement des documents qualité...
+                                <td colspan="8" class="p-8 text-center text-slate-500">
+                                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Chargement du registre documentaire...
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Footer Pagination -->
-                <div class="h-10 bg-slate-900 border-t border-slate-800 flex items-center justify-between px-4 text-xs text-slate-400 shrink-0">
-                    <div id="pagination-info">Page 1 sur 1</div>
-                    <div class="flex items-center space-x-1">
-                        <button id="btn-prev" class="px-2 py-1 bg-slate-800 rounded border border-slate-700 hover:bg-slate-700 text-slate-300 disabled:opacity-50" disabled>Précédent</button>
-                        <button id="btn-next" class="px-2 py-1 bg-slate-800 rounded border border-slate-700 hover:bg-slate-700 text-slate-300 disabled:opacity-50" disabled>Suivant</button>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
 
-    <!-- SLIDE-OVER DETAIL DRAWER -->
-    <div id="drawer-overlay" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-30 hidden transition-opacity"></div>
-    <aside id="detail-drawer" class="fixed top-0 right-0 h-full w-96 bg-slate-900 border-l border-slate-800 z-40 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
-        <div class="h-14 px-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-file-shield text-blue-500"></i>
-                <span class="font-bold text-slate-200">Fiche Métadonnées ISO</span>
-            </div>
-            <button id="close-drawer" class="text-slate-400 hover:text-white p-1">
-                <i class="fa-solid fa-xmark text-base"></i>
-            </button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto p-4 space-y-6 text-xs">
-            <div class="border-b border-slate-800 pb-3">
-                <span id="drawer-code" class="font-mono text-blue-400 font-bold text-sm">--</span>
-                <h3 id="drawer-title" class="font-semibold text-slate-100 text-base mt-1">Sélectionnez un document</h3>
+    <!-- Modale : Création / Téléversement d'un Document -->
+    <div id="modal-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+                <h3 class="font-bold text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-file-circle-plus text-blue-400"></i>
+                    Nouveau Document Qualité
+                </h3>
+                <button id="close-modal" class="text-slate-400 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
             </div>
 
-            <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
-                        <span class="text-slate-500 block text-[10px] uppercase font-semibold">Indice Révision</span>
-                        <span id="drawer-version" class="text-slate-200 font-bold font-mono">--</span>
-                    </div>
-                    <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
-                        <span class="text-slate-500 block text-[10px] uppercase font-semibold">Statut</span>
-                        <span id="drawer-status" class="text-slate-400 font-semibold">--</span>
-                    </div>
-                </div>
-
-                <div class="bg-slate-950 p-3 rounded border border-slate-800 space-y-2">
-                    <div>
-                        <span class="text-slate-500 block text-[10px] uppercase font-semibold">Rédacteur / Pilote</span>
-                        <span id="drawer-author" class="text-slate-200">--</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 block text-[10px] uppercase font-semibold">Approbateur</span>
-                        <span id="drawer-approver" class="text-slate-200">--</span>
-                    </div>
-                </div>
-
-                <div class="bg-slate-950 p-3 rounded border border-slate-800 space-y-2">
-                    <div class="flex justify-between">
-                        <span class="text-slate-500">Date d'application:</span>
-                        <span id="drawer-effective" class="text-slate-300 font-mono">--</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-slate-500">Prochaine révision:</span>
-                        <span id="drawer-review" class="text-slate-300 font-mono">--</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pt-2">
-                <a href="#" id="drawer-download" target="_blank" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium flex items-center justify-center space-x-2 transition opacity-50 cursor-not-allowed">
-                    <i class="fa-solid fa-file-pdf"></i>
-                    <span>Consulter le Document (PDF)</span>
-                </a>
-            </div>
-        </div>
-    </aside>
-
-    <!-- MODAL NEW DOCUMENT -->
-    <div id="modal-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-lg w-full max-w-lg overflow-hidden shadow-2xl">
-            <div class="h-12 px-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-                <span class="font-bold text-slate-200 text-sm"><i class="fa-solid fa-file-circle-plus text-blue-500 mr-2"></i>Nouveau Document Qualité</span>
-                <button id="close-modal" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form id="form-document" class="p-4 space-y-3 text-xs">
+            <form id="form-document" class="space-y-4 text-xs">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-slate-400 mb-1">Code / Référence *</label>
-                        <input type="text" name="code" required placeholder="ex: PR-QUAL-009" class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
+                        <label class="block text-slate-400 mb-1">Code Document *</label>
+                        <input type="text" name="code" required placeholder="ex: PR-QUAL-005" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1">Type *</label>
-                        <select name="type" required class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
-                            <option value="procedure">Procédure</option>
-                            <option value="mode_operatoire">Mode Opératoire</option>
-                            <option value="formulaire">Formulaire</option>
-                            <option value="manuel">Manuel</option>
-                            <option value="politique">Politique</option>
-                            <option value="externe">Document Externe</option>
+                        <label class="block text-slate-400 mb-1">Processus *</label>
+                        <select name="process_code" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
+                            <optgroup label="Pilotage">
+                                <option value="P1">P1 - Planifier, organiser et communiquer</option>
+                                <option value="P2">P2 - Maîtriser les documents, enregistrements et docs ext.</option>
+                                <option value="P3">P3 - Écouter les clients</option>
+                                <option value="P4">P4 - Gérer et améliorer le système de management</option>
+                            </optgroup>
+                            <optgroup label="Réalisation">
+                                <option value="R1">R1 - Préparer les objets d'essai</option>
+                                <option value="R2">R2 - Réaliser les essais</option>
+                                <option value="R3">R3 - Rédiger les rapports d'essai</option>
+                            </optgroup>
+                            <optgroup label="Support">
+                                <option value="S1">S1 - Gérer les incertitudes et la qualité des résultats</option>
+                                <option value="S2">S2 - Gérer le parc des instruments de mesure</option>
+                                <option value="S3">S3 - Gérer les ressources humaines</option>
+                                <option value="S4">S4 - Gérer les achats et les approvisionnements</option>
+                                <option value="S5">S5 - Gérer la maintenance</option>
+                                <option value="S6">S6 - Gérer le système d'information</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-slate-400 mb-1">Intitulé du Document *</label>
-                    <input type="text" name="title" required placeholder="Titre complet..." class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
+                    <label class="block text-slate-400 mb-1">Titre du Document *</label>
+                    <input type="text" name="title" required placeholder="Intitulé exact de la procédure ou mode opératoire" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <label class="block text-slate-400 mb-1">Version / Indice</label>
-                        <input type="text" name="version" value="01" class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
+                        <label class="block text-slate-400 mb-1">Type *</label>
+                        <select name="type" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
+                            <option value="procedure">Procédure</option>
+                            <option value="mode_operatoire">Mode Opératoire</option>
+                            <option value="formulaire">Formulaire</option>
+                            <option value="manuel">Manuel</option>
+                            <option value="politique">Politique</option>
+                        </select>
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1">Statut</label>
-                        <select name="status" class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
-                            <option value="en_vigueur">En Vigueur</option>
-                            <option value="en_revision">En Révision</option>
+                        <label class="block text-slate-400 mb-1">Version</label>
+                        <input type="text" name="version" value="01" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Statut Initial</label>
+                        <select name="status" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
                             <option value="brouillon">Brouillon</option>
+                            <option value="en_vigueur">En Vigueur</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-slate-400 mb-1">Rédacteur / Pilote</label>
-                        <input type="text" name="process_owner" placeholder="Nom du responsable" class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
+                        <label class="block text-slate-400 mb-1">Pilote / Rédacteur *</label>
+                        <input type="text" name="process_owner" required placeholder="Nom du responsable" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">Approbateur</label>
-                        <input type="text" name="approver" placeholder="Responsable Qualité" class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
+                        <input type="text" name="approver" placeholder="Responsable Qualité / Dir." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-slate-400 mb-1">Date d'effet</label>
-                        <input type="date" name="effective_date" class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
+                        <input type="date" name="effective_date" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1">Prochaine révision</label>
-                        <input type="date" name="review_date" class="w-full p-2 bg-slate-950 border border-slate-800 rounded text-slate-200 focus:outline-none focus:border-blue-500">
+                        <label class="block text-slate-400 mb-1">Date de révision</label>
+                        <input type="date" name="review_date" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-slate-400 mb-1">Fichier PDF</label>
-                    <input type="file" name="doc_file" accept=".pdf" class="w-full p-1.5 bg-slate-950 border border-slate-800 rounded text-slate-400 focus:outline-none">
+                    <label class="block text-slate-400 mb-1">Fichier PDF rattaché</label>
+                    <input type="file" name="document_file" accept=".pdf" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-400 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:bg-blue-600/20 file:text-blue-400 hover:file:bg-blue-600/30">
                 </div>
 
-                <div class="pt-3 flex justify-end space-x-2">
-                    <button type="button" id="btn-cancel-modal" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-medium">Annuler</button>
-                    <button type="submit" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium">Enregistrer</button>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+                    <button type="button" id="btn-cancel-modal" class="px-4 py-2 rounded-lg text-slate-400 hover:bg-slate-800 transition">Annuler</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition shadow-lg shadow-blue-600/20">Enregistrer</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- SCRIPT DE GESTION DU MASQUAGE TOTAL DE LA BARRE LATÉRALE -->
+    <!-- Tiroir Latéral (Drawer) : Consultation Métadonnées & PDF -->
+    <div id="drawer-overlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden"></div>
+    <div id="detail-drawer" class="fixed top-0 right-0 bottom-0 w-96 bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between">
+        <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <span id="drawer-code" class="font-mono text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">--</span>
+                    <h2 id="drawer-title" class="text-base font-bold text-slate-100 mt-2 leading-snug">--</h2>
+                </div>
+                <button id="close-drawer" class="text-slate-400 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <div>
+                    <span class="text-slate-500 block mb-1">Statut Actuel</span>
+                    <div id="drawer-status">--</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 border-t border-b border-slate-800/60 py-3">
+                    <div>
+                        <span class="text-slate-500 block">Version</span>
+                        <span id="drawer-version" class="font-mono font-bold text-slate-200">--</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Rédacteur / Pilote</span>
+                        <span id="drawer-author" class="text-slate-200">--</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div>
+                        <span class="text-slate-500 block">Approbateur</span>
+                        <span id="drawer-approver" class="text-slate-200">--</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Date d'Application (Effet)</span>
+                        <span id="drawer-effective" class="font-mono text-slate-200">--</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Prochaine Échéance de Révision</span>
+                        <span id="drawer-review" class="font-mono text-slate-200">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4">
+            <a id="drawer-download" href="#" target="_blank" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg text-xs flex items-center justify-center space-x-2 transition shadow-lg shadow-blue-600/20">
+                <i class="fa-solid fa-file-pdf text-sm"></i>
+                <span>Consulter le Document (PDF)</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Script Inline pour la fonction Toggle Latérale -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggle-sidebar');
-            const revealBtn = document.getElementById('btn-reveal-sidebar');
-
-            function toggleSidebar() {
-                const isHidden = sidebar.classList.contains('w-0');
-
-                if (isHidden) {
-                    // Afficher la barre
-                    sidebar.classList.remove('w-0', 'border-none');
-                    sidebar.classList.add('w-64');
-                    revealBtn.classList.add('hidden');
-                } else {
-                    // Masquer complètement la barre
-                    sidebar.classList.remove('w-64');
-                    sidebar.classList.add('w-0', 'border-none');
-                    revealBtn.classList.remove('hidden');
-                }
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar-nav');
+            if (sidebar) {
+                sidebar.classList.toggle('hidden');
             }
-
-            if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-            if (revealBtn) revealBtn.addEventListener('click', toggleSidebar);
-
-            // Raccourci clavier Ctrl + B pour basculer la barre latérale
-            window.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-                    e.preventDefault();
-                    toggleSidebar();
-                }
-            });
-        });
+        }
     </script>
+
+    <!-- Fichier JavaScript principal -->
     <script src="assets/js/app.js"></script>
 </body>
 </html>
