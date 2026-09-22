@@ -1,442 +1,524 @@
 /**
- * QualiTech - ISO 17025 Document Management System
- * assets/js/app.js
+ * QualiTech - Système de Gestion Documentaire ISO 17025
+ * app.js - Gestion de l'affichage, pagination, filtres et interactions
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. Données Initiales Mockées (Registre ISO 17025) ---
-    let documents = [
-        {
-            id: 1,
-            code: 'PR-QUAL-001',
-            title: 'Procédure de maîtrise des documents et des enregistrements',
-            type: 'procedure',
-            version: '03',
-            status: 'en_vigueur',
-            process_code: 'P1',
-            process_owner: 'Dr. A. Benali',
-            approver: 'Dir. Qualité',
-            effective_date: '2025-01-15',
-            review_date: '2026-10-15',
-            origin: 'interne',
-            file_path: 'uploads/PR-QUAL-001.pdf'
-        },
-        {
-            id: 2,
-            code: 'MO-MET-012',
-            title: 'Étalonnage des balances analytiques et calcul d\'incertitude',
-            type: 'mode_operatoire',
-            version: '02',
-            status: 'en_vigueur',
-            process_code: 'P3',
-            process_owner: 'M. K. Saidi',
-            approver: 'Resp. Métrologie',
-            effective_date: '2024-06-10',
-            review_date: '2026-09-01', // Échéance dépassée
-            origin: 'interne',
-            file_path: 'uploads/MO-MET-012.pdf'
-        },
-        {
-            id: 3,
-            code: 'FO-ESS-045',
-            title: 'Fiche d\'enregistrement des essais d\'écrasement béton',
-            type: 'formulaire',
-            version: '01',
-            status: 'en_vigueur',
-            process_code: 'P2',
-            process_owner: 'Ing. S. Brahimi',
-            approver: 'Chef Labo',
-            effective_date: '2025-11-20',
-            review_date: '2026-10-05', // Dans moins de 30 jours
-            origin: 'interne',
-            file_path: null
-        },
-        {
-            id: 4,
-            code: 'PR-ACH-003',
-            title: 'Évaluation des fournisseurs et prestataires de services critiques',
-            type: 'procedure',
-            version: '02',
-            status: 'en_revision',
-            process_code: 'P4',
-            process_owner: 'L. Mansouri',
-            approver: 'Dir. Achats',
-            effective_date: '2023-04-01',
-            review_date: '2026-04-01',
-            origin: 'interne',
-            file_path: 'uploads/PR-ACH-003.pdf'
-        },
-        {
-            id: 5,
-            code: 'ISO-17025-2017',
-            title: 'Exigences générales concernant la compétence des laboratoires d\'étalonnages et d\'essais',
-            type: 'externe',
-            version: '2017',
-            status: 'en_vigueur',
-            process_code: 'P1',
-            process_owner: 'Resp. Qualité',
-            approver: 'ISO/IEC',
-            effective_date: '2018-01-01',
-            review_date: '2028-01-01',
-            origin: 'externe',
-            file_path: 'uploads/ISO-17025.pdf'
-        },
-        {
-            id: 6,
-            code: 'MO-ESS-088',
-            title: 'Essai de perméabilité à l\'eau sur mortier durci',
-            type: 'mode_operatoire',
-            version: '00',
-            status: 'brouillon',
-            process_code: 'P2',
-            process_owner: 'Ing. S. Brahimi',
-            approver: 'En attente',
-            effective_date: '',
-            review_date: '',
-            origin: 'interne',
-            file_path: null
-        },
-        {
-            id: 7,
-            code: 'PR-QUAL-000',
-            title: 'Manuel Qualité ISO 17025 v2005 (Ancienne Version)',
-            type: 'manuel',
-            version: '01',
-            status: 'perime',
-            process_code: 'P1',
-            process_owner: 'Dr. A. Benali',
-            approver: 'Direction',
-            effective_date: '2015-01-01',
-            review_date: '2018-01-01',
-            origin: 'interne',
-            file_path: null
-        }
-    ];
+/* ==========================================================================
+   0. INITIALISATION SÉCURISÉE
+   ========================================================================== */
 
-    // --- 2. Filtres Actifs ---
-    const filters = {
-        search: '',
-        process: '',
-        type: '',
-        status: '',
-        origin: '',
-        alertsOnly: false
+function startApp() {
+    // Variable d'état global
+    window.AppState = {
+        documents: [],
+        filteredDocuments: [],
+        currentPage: 1,
+        itemsPerPage: 10,
+        filters: {
+            search: '',
+            type: '',
+            status: '',
+            process: '',
+            origin: ''
+        }
     };
 
-    // --- 3. Sélecteurs DOM ---
-    const tableBody = document.getElementById('document-table-body');
-    const globalSearchInput = document.getElementById('global-search');
-    const filterTypeSelect = document.getElementById('filter-type');
-    const filterStatusSelect = document.getElementById('filter-status');
+    // Initialisation des événements et chargement
+    initEvents();
+    loadDocuments();
+}
+
+// Sécurité : s'exécute que le DOM soit en cours de chargement ou déjà prêt
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startApp);
+} else {
+    startApp();
+}
+
+/* ==========================================================================
+   1. DONNÉES & CHARGEMENT
+   ========================================================================== */
+
+/**
+ * Charge les documents depuis le backend PHP/API ou utilise un Mock Data ISO 17025
+ */
+async function loadDocuments() {
+    try {
+        // Décommentez pour connecter votre API PHP réelle :
+        // const response = await fetch('api/get_documents.php');
+        // window.AppState.documents = await response.json();
+
+        // Données de démonstration (Mock Data) conformes ISO 17025
+        window.AppState.documents = [
+            { id: 1, code: 'PR-PIL-001', title: 'Procédure de maîtrise de la documentation et des enregistrements qualité', type: 'procedure', process_code: 'P2', version: '03', status: 'en_vigueur', process_owner: 'Dr. Karim Benali', approver: 'Directeur Qualité', effective_date: '2025-01-15', review_date: '2027-01-15', origin: 'interne' },
+            { id: 2, code: 'MO-ESS-012', title: 'Mode opératoire d\'essai de compression sur bétons hydrauliques (NF EN 12390-3)', type: 'mode_operatoire', process_code: 'R2', version: '02', status: 'en_vigueur', process_owner: 'Ing. Amina Khelil', approver: 'Resp. Laboratoire', effective_date: '2024-06-10', review_date: '2026-10-15', origin: 'interne' },
+            { id: 3, code: 'FOR-MET-004', title: 'Fiche d\'étalonnage et vérification métrologique des dynamomètres et capteurs de force', type: 'formulaire', process_code: 'S2', version: '01', status: 'en_revision', process_owner: 'Technicien Métrologie', approver: 'Resp. Métrologie', effective_date: '2023-11-01', review_date: '2026-09-30', origin: 'interne' },
+            { id: 4, code: 'POL-QUAL-001', title: 'Politique d\'impartialité, d\'indépendance et de confidentialité du laboratoire', type: 'politique', process_code: 'P1', version: '04', status: 'en_vigueur', process_owner: 'Direction Générale', approver: 'Comité de Direction', effective_date: '2026-01-05', review_date: '2028-01-05', origin: 'interne' },
+            { id: 5, code: 'MAN-QUAL-17025', title: 'Manuel de Management de la Qualité ISO/IEC 17025:2017', type: 'manuel', process_code: 'P4', version: '05', status: 'en_vigueur', process_owner: 'Resp. Qualité', approver: 'Directeur Général', effective_date: '2025-03-20', review_date: '2027-03-20', origin: 'interne' },
+            { id: 6, code: 'PR-SUP-008', title: 'Procédure d\'évaluation des incertitudes de mesure selon le GUM', type: 'procedure', process_code: 'S1', version: '01', status: 'brouillon', process_owner: 'Ing. Yassine Mourad', approver: 'Resp. Qualité', effective_date: '', review_date: '2026-11-30', origin: 'interne' },
+            { id: 7, code: 'EXT-ISO-17025', title: 'Norme ISO/IEC 17025:2017 - Exigences générales concernant la compétence des laboratoires d\'étalonnages et d\'essais', type: 'externe', process_code: 'P2', version: '2017', status: 'en_vigueur', process_owner: 'Veille Normative', approver: 'ISO/CEI', effective_date: '2017-11-01', review_date: '2027-12-31', origin: 'externe' },
+            { id: 8, code: 'MO-ESS-015', title: 'Analyse granulométrique des granulats par tamisage (NF EN 933-1)', type: 'mode_operatoire', process_code: 'R2', version: '01', status: 'perime', process_owner: 'Ing. Amina Khelil', approver: 'Resp. Laboratoire', effective_date: '2020-02-10', review_date: '2024-02-10', origin: 'interne' },
+            { id: 9, code: 'FOR-ACH-002', title: 'Grille d\'évaluation et d\'habilitation des fournisseurs de prestations d\'étalonnage externe (COFRAC/ALGERAC)', type: 'formulaire', process_code: 'S4', version: '02', status: 'en_vigueur', process_owner: 'Resp. Achats', approver: 'Resp. Qualité', effective_date: '2025-05-12', review_date: '2026-10-01', origin: 'interne' },
+            { id: 10, code: 'PR-PIL-003', title: 'Procédure de traitement des réclamations clients, travaux non conformes et actions correctives', type: 'procedure', process_code: 'P3', version: '03', status: 'en_vigueur', process_owner: 'Resp. Clientèle', approver: 'Directeur Qualité', effective_date: '2024-09-01', review_date: '2026-12-01', origin: 'interne' },
+            { id: 11, code: 'MO-SUP-020', title: 'Sauvegarde, sécurisation des données et gestion du système d\'information LIMS', type: 'mode_operatoire', process_code: 'S6', version: '02', status: 'en_vigueur', process_owner: 'Administrateur IT', approver: 'Resp. Système Info', effective_date: '2025-08-14', review_date: '2027-08-14', origin: 'interne' },
+            { id: 12, code: 'FOR-RH-005', title: 'Matrice de compétences et fiche d\'autorisation d\'exécution des essais du personnel', type: 'formulaire', process_code: 'S3', version: '03', status: 'en_vigueur', process_owner: 'Resp. RH', approver: 'Resp. Technique', effective_date: '2025-02-01', review_date: '2026-10-20', origin: 'interne' }
+        ];
+
+        applyFilters();
+    } catch (error) {
+        console.error('Erreur lors du chargement des documents :', error);
+    }
+}
+
+/* ==========================================================================
+   2. FILTRAGE & RECHERCHE
+   ========================================================================== */
+
+/**
+ * Applique l'ensemble des filtres actifs sur le jeu de données
+ */
+function applyFilters() {
+    const { search, type, status, process, origin } = window.AppState.filters;
+
+    window.AppState.filteredDocuments = window.AppState.documents.filter(doc => {
+        // Recherche textuelle (Code, Titre, Pilote)
+        const matchesSearch = !search || 
+            doc.code.toLowerCase().includes(search.toLowerCase()) ||
+            doc.title.toLowerCase().includes(search.toLowerCase()) ||
+            doc.process_owner.toLowerCase().includes(search.toLowerCase());
+
+        // Filtre par Type
+        const matchesType = !type || doc.type === type;
+
+        // Filtre par Statut
+        const matchesStatus = !status || doc.status === status;
+
+        // Filtre par Processus ISO
+        const matchesProcess = !process || doc.process_code === process;
+
+        // Filtre par Origine
+        const matchesOrigin = !origin || doc.origin === origin;
+
+        return matchesSearch && matchesType && matchesStatus && matchesProcess && matchesOrigin;
+    });
+
+    // Réinitialiser à la première page à chaque changement de filtre
+    window.AppState.currentPage = 1;
+
+    // Mise à jour des compteurs et du tableau
+    updateStatistics();
+    renderTable();
+}
+
+/* ==========================================================================
+   3. RENDU DU TABLEAU & PAGINATION
+   ========================================================================== */
+
+/**
+ * Rendu dynamique du tableau avec troncage du texte et gestion de pagination
+ */
+function renderTable() {
+    const tbody = document.getElementById('document-table-body');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    const docs = window.AppState.filteredDocuments;
+
+    if (docs.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="p-8 text-center text-slate-500">
+                    <i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>
+                    Aucun document ne correspond à vos critères de recherche.
+                </td>
+            </tr>`;
+        renderPagination(0);
+        return;
+    }
+
+    // Calculs de pagination (10 éléments max par page)
+    const itemsPerPage = window.AppState.itemsPerPage;
+    const totalPages = Math.ceil(docs.length / itemsPerPage);
+
+    if (window.AppState.currentPage > totalPages) {
+        window.AppState.currentPage = totalPages || 1;
+    }
+
+    const startIndex = (window.AppState.currentPage - 1) * itemsPerPage;
+    const paginatedDocs = docs.slice(startIndex, startIndex + itemsPerPage);
+
+    // Génération des lignes du tableau
+    paginatedDocs.forEach(doc => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-800/30 transition group border-b border-slate-800/40';
+
+        tr.innerHTML = `
+            <!-- Code avec points de suspension (truncate) et tooltip au survol -->
+            <td class="p-3 font-mono text-blue-400 font-semibold truncate" title="${escapeHtml(doc.code)}">
+                ${escapeHtml(doc.code)}
+            </td>
+
+            <!-- Titre complet au survol (title) -->
+            <td class="p-3 font-medium text-slate-100">
+                <div class="truncate cursor-help" title="${escapeHtml(doc.title)}">
+                    ${escapeHtml(doc.title)}
+                </div>
+            </td>
+
+            <td class="p-3 capitalize truncate text-slate-300" title="${escapeHtml(formatTypeLabel(doc.type))}">
+                ${escapeHtml(formatTypeLabel(doc.type))}
+            </td>
+
+            <td class="p-3 text-center font-mono text-slate-400">
+                v${escapeHtml(doc.version)}
+            </td>
+
+            <td class="p-3 whitespace-nowrap">
+                ${getStatusBadge(doc.status)}
+            </td>
+
+            <!-- Pilote / Rédacteur avec survol -->
+            <td class="p-3 truncate text-slate-300" title="${escapeHtml(doc.process_owner)}">
+                ${escapeHtml(doc.process_owner)}
+            </td>
+
+            <td class="p-3 font-mono text-xs ${isDeadlineAlert(doc.review_date) ? 'text-amber-400 font-bold' : 'text-slate-400'}">
+                ${doc.review_date || '--'}
+            </td>
+
+            <td class="p-3 text-center whitespace-nowrap">
+                <button onclick="openDrawer(${doc.id})" class="text-slate-400 hover:text-blue-400 p-1.5 rounded-lg hover:bg-slate-800 transition" title="Consulter la fiche détaillée">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Mettre à jour les indicateurs de quantité
     const currentCountEl = document.getElementById('current-count');
     const totalCountEl = document.getElementById('total-count');
+    if (currentCountEl) currentCountEl.textContent = paginatedDocs.length;
+    if (totalCountEl) totalCountEl.textContent = docs.length;
 
-    // Cartes de statistiques
-    const statVigueur = document.getElementById('stat-vigueur');
-    const statRevision = document.getElementById('stat-revision');
-    const statBrouillon = document.getElementById('stat-brouillon');
-    const statPerime = document.getElementById('stat-perime');
-    const statAlertes = document.getElementById('stat-alertes');
+    renderPagination(totalPages);
+}
 
-    const cardVigueur = document.getElementById('card-vigueur');
-    const cardRevision = document.getElementById('card-revision');
-    const cardBrouillon = document.getElementById('card-brouillon');
-    const cardPerime = document.getElementById('card-perime');
-    const cardAlertes = document.getElementById('card-alertes');
+/**
+ * Génère les boutons de pagination
+ */
+function renderPagination(totalPages) {
+    const controls = document.getElementById('pagination-controls');
+    const currentPageNum = document.getElementById('page-current-num');
+    const totalPageNum = document.getElementById('page-total-num');
 
-    // Modale & Drawer
-    const btnOpenModal = document.getElementById('btn-open-modal');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const closeModalBtn = document.getElementById('close-modal');
-    const btnCancelModal = document.getElementById('btn-cancel-modal');
-    const formDocument = document.getElementById('form-document');
+    if (currentPageNum) currentPageNum.textContent = totalPages === 0 ? 0 : window.AppState.currentPage;
+    if (totalPageNum) totalPageNum.textContent = totalPages;
 
-    const drawerOverlay = document.getElementById('drawer-overlay');
-    const detailDrawer = document.getElementById('detail-drawer');
-    const closeDrawerBtn = document.getElementById('close-drawer');
+    if (!controls) return;
+    controls.innerHTML = '';
 
-    // Éléments du Drawer
-    const drawerCode = document.getElementById('drawer-code');
-    const drawerTitle = document.getElementById('drawer-title');
-    const drawerStatus = document.getElementById('drawer-status');
-    const drawerVersion = document.getElementById('drawer-version');
-    const drawerAuthor = document.getElementById('drawer-author');
-    const drawerApprover = document.getElementById('drawer-approver');
-    const drawerEffective = document.getElementById('drawer-effective');
-    const drawerReview = document.getElementById('drawer-review');
-    const drawerDownload = document.getElementById('drawer-download');
+    if (totalPages <= 1) return;
 
-    // --- 4. Utilitaires de Dates et Badge Statuts ---
-    function isReviewAlert(dateString, status) {
-        if (!dateString || status === 'perime' || status === 'brouillon') return false;
-        const reviewDate = new Date(dateString);
-        const today = new Date();
-        const diffDays = (reviewDate - today) / (1000 * 60 * 60 * 24);
-        return diffDays <= 30; // Alerte si dépassé ou échéance dans moins de 30 jours
-    }
+    // Bouton PRÉCÉDENT
+    const prevBtn = document.createElement('button');
+    prevBtn.className = `px-2.5 py-1 rounded border border-slate-800 text-xs transition ${
+        window.AppState.currentPage === 1 
+        ? 'opacity-40 cursor-not-allowed text-slate-600' 
+        : 'hover:bg-slate-800 text-slate-300'
+    }`;
+    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+    prevBtn.disabled = window.AppState.currentPage === 1;
+    prevBtn.onclick = () => {
+        if (window.AppState.currentPage > 1) {
+            window.AppState.currentPage--;
+            renderTable();
+        }
+    };
+    controls.appendChild(prevBtn);
 
-    function getStatusBadge(status) {
-        const badges = {
-            'en_vigueur': '<span class="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px] font-medium"><i class="fa-solid fa-circle-check text-[8px]"></i> En Vigueur</span>',
-            'en_revision': '<span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded text-[10px] font-medium"><i class="fa-solid fa-arrows-rotate text-[8px]"></i> En Révision</span>',
-            'brouillon': '<span class="inline-flex items-center gap-1 bg-slate-500/10 text-slate-400 border border-slate-500/20 px-2 py-0.5 rounded text-[10px] font-medium"><i class="fa-solid fa-pen-ruler text-[8px]"></i> Brouillon</span>',
-            'perime': '<span class="inline-flex items-center gap-1 bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded text-[10px] font-medium"><i class="fa-solid fa-box-archive text-[8px]"></i> Périmé</span>'
+    // Boutons de numéros de pages [1], [2], [3]...
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        const isActive = i === window.AppState.currentPage;
+        pageBtn.className = `px-2.5 py-1 rounded text-xs font-medium transition ${
+            isActive 
+            ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20' 
+            : 'border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+        }`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => {
+            window.AppState.currentPage = i;
+            renderTable();
         };
-        return badges[status] || status;
+        controls.appendChild(pageBtn);
     }
 
-    function getTypeLabel(type) {
-        const types = {
-            'procedure': 'Procédure',
-            'mode_operatoire': 'Mode Opératoire',
-            'formulaire': 'Formulaire',
-            'manuel': 'Manuel',
-            'politique': 'Politique',
-            'externe': 'Doc. Externe'
-        };
-        return types[type] || type;
-    }
+    // Bouton SUIVANT
+    const nextBtn = document.createElement('button');
+    nextBtn.className = `px-2.5 py-1 rounded border border-slate-800 text-xs transition ${
+        window.AppState.currentPage === totalPages 
+        ? 'opacity-40 cursor-not-allowed text-slate-600' 
+        : 'hover:bg-slate-800 text-slate-300'
+    }`;
+    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+    nextBtn.disabled = window.AppState.currentPage === totalPages;
+    nextBtn.onclick = () => {
+        if (window.AppState.currentPage < totalPages) {
+            window.AppState.currentPage++;
+            renderTable();
+        }
+    };
+    controls.appendChild(nextBtn);
+}
 
-    // --- 5. Mise à jour des Statistiques (Cartes) ---
-    function updateStats() {
-        const countVigueur = documents.filter(d => d.status === 'en_vigueur').length;
-        const countRevision = documents.filter(d => d.status === 'en_revision').length;
-        const countBrouillon = documents.filter(d => d.status === 'brouillon').length;
-        const countPerime = documents.filter(d => d.status === 'perime').length;
-        const countAlertes = documents.filter(d => isReviewAlert(d.review_date, d.status)).length;
+/* ==========================================================================
+   4. COMPTEURS ET STATISTIQUES ISO 17025
+   ========================================================================== */
 
-        statVigueur.textContent = countVigueur;
-        statRevision.textContent = countRevision;
-        statBrouillon.textContent = countBrouillon;
-        statPerime.textContent = countPerime;
-        statAlertes.textContent = countAlertes;
+function updateStatistics() {
+    const docs = window.AppState.documents;
 
-        totalCountEl.textContent = documents.length;
-    }
+    const countVigueur = docs.filter(d => d.status === 'en_vigueur').length;
+    const countRevision = docs.filter(d => d.status === 'en_revision').length;
+    const countBrouillon = docs.filter(d => d.status === 'brouillon').length;
+    const countPerime = docs.filter(d => d.status === 'perime').length;
+    const countAlertes = docs.filter(d => isDeadlineAlert(d.review_date)).length;
 
-    // --- 6. Rendu du Tableau avec Filtrage ---
-    function renderTable() {
-        let filtered = documents.filter(doc => {
-            // Filtre Recherche
-            const matchesSearch = !filters.search || 
-                doc.code.toLowerCase().includes(filters.search.toLowerCase()) ||
-                doc.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-                doc.process_owner.toLowerCase().includes(filters.search.toLowerCase());
+    setStatText('stat-vigueur', countVigueur);
+    setStatText('stat-revision', countRevision);
+    setStatText('stat-brouillon', countBrouillon);
+    setStatText('stat-perime', countPerime);
+    setStatText('stat-alertes', countAlertes);
+}
 
-            // Filtre Processus
-            const matchesProcess = !filters.process || doc.process_code === filters.process;
+function setStatText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
 
-            // Filtre Type
-            const matchesType = !filters.type || doc.type === filters.type;
+/* ==========================================================================
+   5. ÉVÉNEMENTS & ÉCOUTEURS
+   ========================================================================== */
 
-            // Filtre Statut
-            const matchesStatus = !filters.status || doc.status === filters.status;
-
-            // Filtre Origine
-            const matchesOrigin = !filters.origin || doc.origin === filters.origin;
-
-            // Filtre Alertes uniquement
-            const matchesAlerts = !filters.alertsOnly || isReviewAlert(doc.review_date, doc.status);
-
-            return matchesSearch && matchesProcess && matchesType && matchesStatus && matchesOrigin && matchesAlerts;
+function initEvents() {
+    // 1. Recherche globale avec raccourci clavier '/'
+    const searchInput = document.getElementById('global-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            window.AppState.filters.search = e.target.value.trim();
+            applyFilters();
         });
 
-        currentCountEl.textContent = filtered.length;
-
-        if (filtered.length === 0) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="8" class="p-8 text-center text-slate-500">
-                        <i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>
-                        Aucun document trouvé correspondant aux critères.
-                    </td>
-                </tr>`;
-            return;
-        }
-
-        tableBody.innerHTML = filtered.map(doc => {
-            const hasAlert = isReviewAlert(doc.review_date, doc.status);
-            const reviewDisplay = doc.review_date 
-                ? `<span class="${hasAlert ? 'text-amber-400 font-bold flex items-center gap-1' : 'text-slate-400'}">
-                    ${hasAlert ? '<i class="fa-solid fa-triangle-exclamation text-[10px]"></i>' : ''} ${doc.review_date}
-                   </span>` 
-                : '<span class="text-slate-600">N/A</span>';
-
-            return `
-                <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/40 cursor-pointer" onclick="openDrawer(${doc.id})">
-                    <td class="p-3 font-mono font-bold text-blue-400">${doc.code}</td>
-                    <td class="p-3 font-medium text-slate-100">${doc.title}</td>
-                    <td class="p-3 text-slate-400">${getTypeLabel(doc.type)}</td>
-                    <td class="p-3 text-center font-mono text-slate-300">v${doc.version}</td>
-                    <td class="p-3">${getStatusBadge(doc.status)}</td>
-                    <td class="p-3 text-slate-400">${doc.process_owner}</td>
-                    <td class="p-3">${reviewDisplay}</td>
-                    <td class="p-3 text-center" onclick="event.stopPropagation()">
-                        <button onclick="openDrawer(${doc.id})" class="p-1.5 hover:bg-slate-700 text-slate-400 hover:text-slate-200 rounded transition" title="Consulter">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-        }).join('');
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
     }
 
-    // --- 7. Gestion de la Modale (Nouveau Document) ---
-    function openModal() { modalOverlay.classList.remove('hidden'); }
-    function closeModal() { 
-        modalOverlay.classList.add('hidden'); 
-        formDocument.reset();
+    // 2. Filtres déroulants (Type et Statut)
+    const filterType = document.getElementById('filter-type');
+    if (filterType) {
+        filterType.addEventListener('change', (e) => {
+            window.AppState.filters.type = e.target.value;
+            applyFilters();
+        });
     }
 
-    btnOpenModal.addEventListener('click', openModal);
-    closeModalBtn.addEventListener('click', closeModal);
-    btnCancelModal.addEventListener('click', closeModal);
-
-    formDocument.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const formData = new FormData(formDocument);
-        
-        const newDoc = {
-            id: Date.now(),
-            code: formData.get('code'),
-            title: formData.get('title'),
-            type: formData.get('type'),
-            version: formData.get('version') || '01',
-            status: formData.get('status') || 'brouillon',
-            process_code: formData.get('process_code'),
-            process_owner: formData.get('process_owner'),
-            approver: formData.get('approver') || 'Non assigné',
-            effective_date: formData.get('effective_date') || '',
-            review_date: formData.get('review_date') || '',
-            origin: 'interne',
-            file_path: null
-        };
-
-        documents.unshift(newDoc);
-        updateStats();
-        renderTable();
-        closeModal();
-    });
-
-    // --- 8. Gestion du Tiroir Latéral (Drawer) ---
-    window.openDrawer = function(id) {
-        const doc = documents.find(d => d.id === id);
-        if (!doc) return;
-
-        drawerCode.textContent = doc.code;
-        drawerTitle.textContent = doc.title;
-        drawerStatus.innerHTML = getStatusBadge(doc.status);
-        drawerVersion.textContent = `v${doc.version}`;
-        drawerAuthor.textContent = doc.process_owner;
-        drawerApprover.textContent = doc.approver || 'N/A';
-        drawerEffective.textContent = doc.effective_date || 'N/A';
-        drawerReview.textContent = doc.review_date || 'N/A';
-
-        if (doc.file_path) {
-            drawerDownload.href = doc.file_path;
-            drawerDownload.classList.remove('pointer-events-none', 'opacity-50');
-            drawerDownload.querySelector('span').textContent = 'Consulter le Document (PDF)';
-        } else {
-            drawerDownload.href = '#';
-            drawerDownload.classList.add('pointer-events-none', 'opacity-50');
-            drawerDownload.querySelector('span').textContent = 'Aucun fichier rattaché';
-        }
-
-        drawerOverlay.classList.remove('hidden');
-        detailDrawer.classList.remove('translate-x-full');
-    };
-
-    function closeDrawer() {
-        detailDrawer.classList.add('translate-x-full');
-        drawerOverlay.classList.add('hidden');
+    const filterStatus = document.getElementById('filter-status');
+    if (filterStatus) {
+        filterStatus.addEventListener('change', (e) => {
+            window.AppState.filters.status = e.target.value;
+            applyFilters();
+        });
     }
 
-    closeDrawerBtn.addEventListener('click', closeDrawer);
-    drawerOverlay.addEventListener('click', closeDrawer);
-
-    // --- 9. Événements des Filtres ---
-    globalSearchInput.addEventListener('input', (e) => {
-        filters.search = e.target.value;
-        renderTable();
-    });
-
-    // Raccourci clavier "/" pour la recherche rapide
-    document.addEventListener('keydown', (e) => {
-        if (e.key === '/' && document.activeElement !== globalSearchInput && !modalOverlay.classList.contains('hidden') === false) {
-            e.preventDefault();
-            globalSearchInput.focus();
-        }
-    });
-
-    filterTypeSelect.addEventListener('change', (e) => {
-        filters.type = e.target.value;
-        renderTable();
-    });
-
-    filterStatusSelect.addEventListener('change', (e) => {
-        filters.status = e.target.value;
-        filters.alertsOnly = false;
-        renderTable();
-    });
-
-    // Filtres Navigation Latérale (Processus & Origine)
+    // 3. Navigation dans la Sidebar (Processus ISO)
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('bg-slate-800', 'text-slate-100'));
-            item.classList.add('bg-slate-800', 'text-slate-100');
-            filters.process = item.getAttribute('data-nav-filter');
-            renderTable();
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('bg-slate-800/60', 'font-medium', 'text-slate-100'));
+            item.classList.add('bg-slate-800/60', 'font-medium', 'text-slate-100');
+
+            window.AppState.filters.process = item.getAttribute('data-nav-filter') || '';
+            applyFilters();
         });
     });
 
+    // 4. Navigation Origine (Interne / Externe)
     document.querySelectorAll('.nav-type').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            document.querySelectorAll('.nav-type').forEach(el => el.classList.remove('bg-slate-800', 'text-slate-100'));
-            item.classList.add('bg-slate-800', 'text-slate-100');
-            filters.origin = item.getAttribute('data-nav-type');
-            renderTable();
+            document.querySelectorAll('.nav-type').forEach(i => i.classList.remove('bg-slate-800/60', 'font-medium', 'text-slate-100'));
+            item.classList.add('bg-slate-800/60', 'font-medium', 'text-slate-100');
+
+            window.AppState.filters.origin = item.getAttribute('data-nav-type') || '';
+            applyFilters();
         });
     });
 
-    // Clics sur les 5 Cartes de Statistiques pour Filtrage Rapide
-    cardVigueur.addEventListener('click', () => {
-        filters.status = 'en_vigueur';
-        filters.alertsOnly = false;
-        filterStatusSelect.value = 'en_vigueur';
-        renderTable();
-    });
+    // 5. Clics sur les cartes de statistiques pour filtrage rapide
+    bindCardFilter('card-vigueur', 'en_vigueur');
+    bindCardFilter('card-revision', 'en_revision');
+    bindCardFilter('card-brouillon', 'brouillon');
+    bindCardFilter('card-perime', 'perime');
 
-    cardRevision.addEventListener('click', () => {
-        filters.status = 'en_revision';
-        filters.alertsOnly = false;
-        filterStatusSelect.value = 'en_revision';
-        renderTable();
-    });
+    // 6. Gestion de la Modale de Création
+    const btnOpenModal = document.getElementById('btn-open-modal');
+    const btnCloseModal = document.getElementById('close-modal');
+    const btnCancelModal = document.getElementById('btn-cancel-modal');
+    const modalOverlay = document.getElementById('modal-overlay');
 
-    cardBrouillon.addEventListener('click', () => {
-        filters.status = 'brouillon';
-        filters.alertsOnly = false;
-        filterStatusSelect.value = 'brouillon';
-        renderTable();
-    });
+    if (btnOpenModal) btnOpenModal.addEventListener('click', () => modalOverlay?.classList.remove('hidden'));
+    if (btnCloseModal) btnCloseModal.addEventListener('click', () => modalOverlay?.classList.add('hidden'));
+    if (btnCancelModal) btnCancelModal.addEventListener('click', () => modalOverlay?.classList.add('hidden'));
 
-    cardPerime.addEventListener('click', () => {
-        filters.status = 'perime';
-        filters.alertsOnly = false;
-        filterStatusSelect.value = 'perime';
-        renderTable();
-    });
+    // Soumission du formulaire
+    const formDoc = document.getElementById('form-document');
+    if (formDoc) {
+        formDoc.addEventListener('submit', handleFormSubmit);
+    }
 
-    cardAlertes.addEventListener('click', () => {
-        filters.status = '';
-        filters.alertsOnly = true;
-        filterStatusSelect.value = '';
-        renderTable();
-    });
+    // 7. Fermeture du Drawer
+    const closeDrawerBtn = document.getElementById('close-drawer');
+    const drawerOverlay = document.getElementById('drawer-overlay');
 
-    // --- 10. Initialisation ---
-    updateStats();
-    renderTable();
-});
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+    if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
+}
+
+function bindCardFilter(cardId, statusValue) {
+    const card = document.getElementById(cardId);
+    if (card) {
+        card.addEventListener('click', () => {
+            const filterStatus = document.getElementById('filter-status');
+            if (filterStatus) {
+                filterStatus.value = statusValue;
+                window.AppState.filters.status = statusValue;
+                applyFilters();
+            }
+        });
+    }
+}
+
+/* ==========================================================================
+   6. DRAWER (TIROIR DE CONSULTATION)
+   ========================================================================== */
+
+function openDrawer(docId) {
+    const doc = window.AppState.documents.find(d => d.id === docId || d.id === parseInt(docId));
+    if (!doc) return;
+
+    const setElText = (id, txt) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+    };
+
+    setElText('drawer-code', doc.code);
+    setElText('drawer-title', doc.title);
+    
+    const statusEl = document.getElementById('drawer-status');
+    if (statusEl) statusEl.innerHTML = getStatusBadge(doc.status);
+
+    setElText('drawer-version', 'v' + doc.version);
+    setElText('drawer-author', doc.process_owner);
+    setElText('drawer-approver', doc.approver || '--');
+    setElText('drawer-effective', doc.effective_date || '--');
+    setElText('drawer-review', doc.review_date || '--');
+
+    const drawer = document.getElementById('detail-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+
+    if (overlay) overlay.classList.remove('hidden');
+    if (drawer) drawer.classList.remove('translate-x-full');
+}
+
+function closeDrawer() {
+    const drawer = document.getElementById('detail-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+
+    if (drawer) drawer.classList.add('translate-x-full');
+    if (overlay) overlay.classList.add('hidden');
+}
+
+/* ==========================================================================
+   7. CRÉATION D'UN DOCUMENT (SOUMISSION FORMULAIRE)
+   ========================================================================== */
+
+function handleFormSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const newDoc = {
+        id: Date.now(),
+        code: formData.get('code'),
+        title: formData.get('title'),
+        type: formData.get('type'),
+        process_code: formData.get('process_code'),
+        version: formData.get('version') || '01',
+        status: formData.get('status') || 'brouillon',
+        process_owner: formData.get('process_owner'),
+        approver: formData.get('approver') || '',
+        effective_date: formData.get('effective_date') || '',
+        review_date: formData.get('review_date') || '',
+        origin: 'interne'
+    };
+
+    // Ajouter au tableau local
+    window.AppState.documents.unshift(newDoc);
+    applyFilters();
+
+    // Réinitialiser et fermer
+    e.target.reset();
+    document.getElementById('modal-overlay')?.classList.add('hidden');
+}
+
+/* ==========================================================================
+   8. UTILITAIRES DE FORMATAGE & SÉCURITÉ
+   ========================================================================== */
+
+function getStatusBadge(status) {
+    switch (status) {
+        case 'en_vigueur':
+            return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><i class="fa-solid fa-circle-check text-[9px]"></i> En Vigueur</span>`;
+        case 'en_revision':
+            return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20"><i class="fa-solid fa-arrows-rotate text-[9px]"></i> En Révision</span>`;
+        case 'brouillon':
+            return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-500/10 text-slate-400 border border-slate-500/20"><i class="fa-solid fa-pen-ruler text-[9px]"></i> Brouillon</span>`;
+        case 'perime':
+            return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20"><i class="fa-solid fa-box-archive text-[9px]"></i> Périmé</span>`;
+        default:
+            return `<span class="px-2 py-0.5 rounded text-[11px] bg-slate-800 text-slate-400">${status}</span>`;
+    }
+}
+
+function formatTypeLabel(type) {
+    const labels = {
+        procedure: 'Procédure',
+        mode_operatoire: 'Mode Opératoire',
+        formulaire: 'Formulaire',
+        manuel: 'Manuel',
+        politique: 'Politique',
+        externe: 'Doc. Externe'
+    };
+    return labels[type] || type;
+}
+
+function isDeadlineAlert(dateString) {
+    if (!dateString) return false;
+    const reviewDate = new Date(dateString);
+    const today = new Date();
+    const diffDays = Math.ceil((reviewDate - today) / (1000 * 60 * 60 * 24));
+    return diffDays <= 30; // Alerte si l'échéance est dans moins de 30 jours ou dépassée
+}
+
+function escapeHtml(str) {
+    return String(str || '')
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}

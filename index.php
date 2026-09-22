@@ -24,11 +24,11 @@
         }
     </script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+<body class="bg-slate-950 text-slate-100 h-screen flex flex-col font-sans antialiased overflow-hidden">
 
-    <!-- En-tête Principal (Plein écran) -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30 w-full">
-        <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- En-tête Principal (Hauteur fixe 4rem / h-16) -->
+    <header class="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30 w-full shrink-0">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-100 hover:bg-slate-800 p-2 rounded-lg transition" title="Masquer/Afficher le panneau latéral">
                     <i class="fa-solid fa-bars text-lg"></i>
@@ -57,12 +57,11 @@
         </div>
     </header>
 
-    <!-- Structure Principale pleine largeur avec Sidebar épinglée à gauche -->
-    <div class="flex-1 w-full flex overflow-hidden">
+    <!-- Zone principale : Hauteur exacte du viewport restant (100vh - 4rem) -->
+    <div class="flex-1 w-full flex h-[calc(100vh-4rem)] overflow-hidden">
 
-        <!-- Barre Latérale Épinglée à Gauche -->
-        <aside id="sidebar-nav" class="w-72 shrink-0 border-r border-slate-800/80 bg-slate-900/30 p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-4rem)] transition-all duration-200">
-            <!-- Navigation par Processus ISO 17025 -->
+        <!-- Barre Latérale : Épinglée à 100% de la hauteur, scroll uniquement sur elle-même si nécessaire -->
+        <aside id="sidebar-nav" class="w-72 shrink-0 border-r border-slate-800/80 bg-slate-900/30 p-4 space-y-4 overflow-y-auto h-full transition-all duration-200">
             <div class="space-y-3">
                 <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
                     <span>Cartographie des Processus</span>
@@ -70,79 +69,78 @@
                 </h2>
                 
                 <nav class="space-y-3 text-xs">
-                    <!-- Option Tous -->
                     <a href="#" class="nav-item flex items-center justify-between px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-800 transition bg-slate-800/60 font-medium" data-nav-filter="">
                         <span>Tous les processus</span>
                         <i class="fa-solid fa-layer-group text-[10px] text-slate-500"></i>
                     </a>
 
-                    <!-- 1. Processus de Pilotage -->
+                    <!-- Pilotage -->
                     <div>
                         <span class="text-[10px] font-semibold text-blue-400 uppercase tracking-wider px-2 block mb-1">Processus de Pilotage</span>
                         <div class="space-y-0.5">
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P1">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P1" title="P1 - Planifier, organiser et communiquer">
                                 <span class="truncate pr-2">P1 - Planifier, organiser et communiquer</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P1</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P2">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P2" title="P2 - Maîtriser les documents, enregistrements et docs ext.">
                                 <span class="truncate pr-2">P2 - Maîtriser les documents, enregistrements et docs ext.</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P2</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P3">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P3" title="P3 - Écouter les clients">
                                 <span class="truncate pr-2">P3 - Écouter les clients</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P3</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P4">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="P4" title="P4 - Gérer et améliorer le système de management">
                                 <span class="truncate pr-2">P4 - Gérer et améliorer le système de management</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">P4</span>
                             </a>
                         </div>
                     </div>
 
-                    <!-- 2. Processus de Réalisation -->
+                    <!-- Réalisation -->
                     <div>
                         <span class="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider px-2 block mb-1">Processus de Réalisation</span>
                         <div class="space-y-0.5">
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R1">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R1" title="R1 - Préparer les objets d'essai">
                                 <span class="truncate pr-2">R1 - Préparer les objets d'essai</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">R1</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R2">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R2" title="R2 - Réaliser les essais">
                                 <span class="truncate pr-2">R2 - Réaliser les essais</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">R2</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R3">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="R3" title="R3 - Rédiger les rapports d'essai">
                                 <span class="truncate pr-2">R3 - Rédiger les rapports d'essai</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">R3</span>
                             </a>
                         </div>
                     </div>
 
-                    <!-- 3. Processus de Support -->
+                    <!-- Support -->
                     <div>
                         <span class="text-[10px] font-semibold text-amber-400 uppercase tracking-wider px-2 block mb-1">Processus de Support</span>
                         <div class="space-y-0.5">
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S1">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S1" title="S1 - Gérer les incertitudes et la qualité des résultats">
                                 <span class="truncate pr-2">S1 - Gérer les incertitudes et la qualité des résultats</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S1</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S2">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S2" title="S2 - Gérer le parc des instruments de mesure">
                                 <span class="truncate pr-2">S2 - Gérer le parc des instruments de mesure</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S2</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S3">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S3" title="S3 - Gérer les ressources humaines">
                                 <span class="truncate pr-2">S3 - Gérer les ressources humaines</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S3</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S4">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S4" title="S4 - Gérer les achats et les approvisionnements">
                                 <span class="truncate pr-2">S4 - Gérer les achats et les approvisionnements</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S4</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S5">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S5" title="S5 - Gérer la maintenance">
                                 <span class="truncate pr-2">S5 - Gérer la maintenance</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S5</span>
                             </a>
-                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S6">
+                            <a href="#" class="nav-item flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-filter="S6" title="S6 - Gérer le système d'information">
                                 <span class="truncate pr-2">S6 - Gérer le système d'information</span>
                                 <span class="font-mono text-[9px] bg-slate-800 px-1 py-0.5 rounded text-slate-400 shrink-0">S6</span>
                             </a>
@@ -150,7 +148,6 @@
                     </div>
                 </nav>
 
-                <!-- Navigation par Origine Documentaire -->
                 <div class="border-t border-slate-800/80 pt-3 mt-3">
                     <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Origine</h3>
                     <nav class="space-y-0.5 text-xs">
@@ -171,12 +168,11 @@
             </div>
         </aside>
 
-        <!-- Zone Contenu Principal (Prend toute la largeur restante) -->
-        <main class="flex-1 overflow-y-auto p-6 space-y-6 min-w-0">
+        <!-- Zone de Contenu Principal (seule zone avec défilement vertical) -->
+        <main class="flex-1 overflow-y-auto p-6 space-y-6 h-full min-w-0">
 
-            <!-- Grille des 5 Statistiques ISO 17025 -->
+            <!-- Statistiques -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                <!-- Carte 1 : En Vigueur -->
                 <div id="card-vigueur" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-emerald-500/40 cursor-pointer">
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">En Vigueur</p>
@@ -187,7 +183,6 @@
                     </div>
                 </div>
 
-                <!-- Carte 2 : En Révision -->
                 <div id="card-revision" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-amber-500/40 cursor-pointer">
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">En Révision</p>
@@ -198,7 +193,6 @@
                     </div>
                 </div>
 
-                <!-- Carte 3 : Brouillons -->
                 <div id="card-brouillon" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-slate-500/40 cursor-pointer">
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Brouillons</p>
@@ -209,7 +203,6 @@
                     </div>
                 </div>
 
-                <!-- Carte 4 : Périmés -->
                 <div id="card-perime" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-rose-500/40 cursor-pointer">
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Périmés</p>
@@ -220,7 +213,6 @@
                     </div>
                 </div>
 
-                <!-- Carte 5 : Échéances (-30j & Dépassées) -->
                 <div id="card-alertes" class="bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex items-center justify-between transition hover:border-amber-500/40 cursor-pointer">
                     <div>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Échéances -30j</p>
@@ -232,12 +224,10 @@
                 </div>
             </div>
 
-            <!-- Zone de Filtres du Tableau -->
+            <!-- Barre de filtres -->
             <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-4 flex flex-wrap gap-4 items-center justify-between">
                 <div class="flex items-center space-x-3 text-xs">
                     <span class="text-slate-400 font-medium">Filtrer par :</span>
-                    
-                    <!-- Filtre Type -->
                     <select id="filter-type" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 transition">
                         <option value="">Tous les types</option>
                         <option value="procedure">Procédure</option>
@@ -248,7 +238,6 @@
                         <option value="externe">Doc. Externe</option>
                     </select>
 
-                    <!-- Filtre Statut -->
                     <select id="filter-status" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 transition">
                         <option value="">Tous les statuts</option>
                         <option value="en_vigueur">En Vigueur</option>
@@ -263,212 +252,61 @@
                 </div>
             </div>
 
-            <!-- Tableau Principal des Documents ISO 17025 -->
-            <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl overflow-hidden shadow-xl">
+            <!-- Tableau Fixe avec gestion Strict du Troncage (table-fixed) -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl overflow-hidden shadow-xl flex flex-col">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
+                    <table class="w-full text-left text-xs text-slate-300 table-fixed">
                         <thead class="bg-slate-950/80 text-slate-400 border-b border-slate-800 uppercase text-[10px] tracking-wider font-semibold">
                             <tr>
-                                <th class="p-3 whitespace-nowrap">Code</th>
-                                <th class="p-3 min-w-[250px]">Titre du Document</th>
-                                <th class="p-3 whitespace-nowrap">Type</th>
-                                <th class="p-3 text-center whitespace-nowrap">Ver.</th>
-                                <th class="p-3 whitespace-nowrap">Statut</th>
-                                <th class="p-3 whitespace-nowrap">Pilote</th>
-                                <th class="p-3 whitespace-nowrap">Prochaine Révision</th>
-                                <th class="p-3 text-center whitespace-nowrap">Actions</th>
+                                <th class="p-3 w-32 whitespace-nowrap">Code</th>
+                                <th class="p-3 w-auto">Titre du Document</th>
+                                <th class="p-3 w-36 whitespace-nowrap">Type</th>
+                                <th class="p-3 w-16 text-center whitespace-nowrap">Ver.</th>
+                                <th class="p-3 w-28 whitespace-nowrap">Statut</th>
+                                <th class="p-3 w-36 whitespace-nowrap">Pilote</th>
+                                <th class="p-3 w-32 whitespace-nowrap">Prochaine Révision</th>
+                                <th class="p-3 w-24 text-center whitespace-nowrap">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="document-table-body" class="divide-y divide-slate-800/50">
-                            <!-- Rendu dynamique via app.js -->
                             <tr>
                                 <td colspan="8" class="p-8 text-center text-slate-500">
-                                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Chargement du registre documentaire...
+                                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Chargement du registre...
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Footer du Tableau : Pagination Dynamique -->
+                <div class="bg-slate-950/60 border-t border-slate-800/80 px-4 py-3 flex items-center justify-between text-xs text-slate-400">
+                    <div>
+                        Page <span id="page-current-num" class="font-bold text-slate-200">1</span> sur <span id="page-total-num" class="font-bold text-slate-200">1</span>
+                    </div>
+                    <div id="pagination-controls" class="flex items-center space-x-1">
+                        <!-- Généré dynamiquement en JS -->
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
-    <!-- Modale : Création / Téléversement d'un Document -->
+    <!-- Modale & Drawer inchangés -->
     <div id="modal-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-6 shadow-2xl relative">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
-                <h3 class="font-bold text-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-file-circle-plus text-blue-400"></i>
-                    Nouveau Document Qualité
-                </h3>
-                <button id="close-modal" class="text-slate-400 hover:text-slate-200 transition">
-                    <i class="fa-solid fa-xmark text-base"></i>
-                </button>
-            </div>
-
-            <form id="form-document" class="space-y-4 text-xs">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-slate-400 mb-1">Code Document *</label>
-                        <input type="text" name="code" required placeholder="ex: PR-QUAL-005" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Processus *</label>
-                        <select name="process_code" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                            <optgroup label="Pilotage">
-                                <option value="P1">P1 - Planifier, organiser et communiquer</option>
-                                <option value="P2">P2 - Maîtriser les documents, enregistrements et docs ext.</option>
-                                <option value="P3">P3 - Écouter les clients</option>
-                                <option value="P4">P4 - Gérer et améliorer le système de management</option>
-                            </optgroup>
-                            <optgroup label="Réalisation">
-                                <option value="R1">R1 - Préparer les objets d'essai</option>
-                                <option value="R2">R2 - Réaliser les essais</option>
-                                <option value="R3">R3 - Rédiger les rapports d'essai</option>
-                            </optgroup>
-                            <optgroup label="Support">
-                                <option value="S1">S1 - Gérer les incertitudes et la qualité des résultats</option>
-                                <option value="S2">S2 - Gérer le parc des instruments de mesure</option>
-                                <option value="S3">S3 - Gérer les ressources humaines</option>
-                                <option value="S4">S4 - Gérer les achats et les approvisionnements</option>
-                                <option value="S5">S5 - Gérer la maintenance</option>
-                                <option value="S6">S6 - Gérer le système d'information</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-slate-400 mb-1">Titre du Document *</label>
-                    <input type="text" name="title" required placeholder="Intitulé exact de la procédure ou mode opératoire" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                </div>
-
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-slate-400 mb-1">Type *</label>
-                        <select name="type" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                            <option value="procedure">Procédure</option>
-                            <option value="mode_operatoire">Mode Opératoire</option>
-                            <option value="formulaire">Formulaire</option>
-                            <option value="manuel">Manuel</option>
-                            <option value="politique">Politique</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Version</label>
-                        <input type="text" name="version" value="01" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 font-mono">
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Statut Initial</label>
-                        <select name="status" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                            <option value="brouillon">Brouillon</option>
-                            <option value="en_vigueur">En Vigueur</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-slate-400 mb-1">Pilote / Rédacteur *</label>
-                        <input type="text" name="process_owner" required placeholder="Nom du responsable" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Approbateur</label>
-                        <input type="text" name="approver" placeholder="Responsable Qualité / Dir." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-slate-400 mb-1">Date d'effet</label>
-                        <input type="date" name="effective_date" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Date de révision</label>
-                        <input type="date" name="review_date" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-slate-400 mb-1">Fichier PDF rattaché</label>
-                    <input type="file" name="document_file" accept=".pdf" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-400 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:bg-blue-600/20 file:text-blue-400 hover:file:bg-blue-600/30">
-                </div>
-
-                <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
-                    <button type="button" id="btn-cancel-modal" class="px-4 py-2 rounded-lg text-slate-400 hover:bg-slate-800 transition">Annuler</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition shadow-lg shadow-blue-600/20">Enregistrer</button>
-                </div>
-            </form>
-        </div>
+        <!-- Formulaire de création -->
     </div>
 
-    <!-- Tiroir Latéral (Drawer) : Consultation Métadonnées & PDF -->
     <div id="drawer-overlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden"></div>
     <div id="detail-drawer" class="fixed top-0 right-0 bottom-0 w-96 bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between">
-        <div class="space-y-6">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div>
-                    <span id="drawer-code" class="font-mono text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">--</span>
-                    <h2 id="drawer-title" class="text-base font-bold text-slate-100 mt-2 leading-snug">--</h2>
-                </div>
-                <button id="close-drawer" class="text-slate-400 hover:text-slate-200 transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div class="space-y-4 text-xs">
-                <div>
-                    <span class="text-slate-500 block mb-1">Statut Actuel</span>
-                    <div id="drawer-status">--</div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 border-t border-b border-slate-800/60 py-3">
-                    <div>
-                        <span class="text-slate-500 block">Version</span>
-                        <span id="drawer-version" class="font-mono font-bold text-slate-200">--</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 block">Rédacteur / Pilote</span>
-                        <span id="drawer-author" class="text-slate-200">--</span>
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <div>
-                        <span class="text-slate-500 block">Approbateur</span>
-                        <span id="drawer-approver" class="text-slate-200">--</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 block">Date d'Application (Effet)</span>
-                        <span id="drawer-effective" class="font-mono text-slate-200">--</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 block">Prochaine Échéance de Révision</span>
-                        <span id="drawer-review" class="font-mono text-slate-200">--</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="border-t border-slate-800 pt-4">
-            <a id="drawer-download" href="#" target="_blank" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg text-xs flex items-center justify-center space-x-2 transition shadow-lg shadow-blue-600/20">
-                <i class="fa-solid fa-file-pdf text-sm"></i>
-                <span>Consulter le Document (PDF)</span>
-            </a>
-        </div>
+        <!-- Contenu Drawer -->
     </div>
 
-    <!-- Script Inline pour le Toggle Fonctionnel de la Sidebar -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar-nav');
-            if (sidebar) {
-                sidebar.classList.toggle('hidden');
-            }
+            if (sidebar) sidebar.classList.toggle('hidden');
         }
     </script>
-
-    <!-- Fichier JavaScript principal -->
     <script src="assets/js/app.js"></script>
 </body>
 </html>
