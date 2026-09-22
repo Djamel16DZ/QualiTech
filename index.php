@@ -263,7 +263,7 @@
                                 <th class="p-3 w-36 whitespace-nowrap">Type</th>
                                 <th class="p-3 w-16 text-center whitespace-nowrap">Ver.</th>
                                 <th class="p-3 w-28 whitespace-nowrap">Statut</th>
-                                <th class="p-3 w-36 whitespace-nowrap">Pilote</th>
+                                <th class="p-3 w-36 whitespace-nowrap">Date d'application</th>
                                 <th class="p-3 w-32 whitespace-nowrap">Prochaine Révision</th>
                                 <th class="p-3 w-24 text-center whitespace-nowrap">Actions</th>
                             </tr>

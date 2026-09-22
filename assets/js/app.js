@@ -166,9 +166,9 @@ function renderTable() {
                 ${getStatusBadge(doc.status)}
             </td>
 
-            <!-- Pilote / Rédacteur -->
-            <td class="p-3 truncate text-slate-300" title="${escapeHtml(doc.process_owner || '--')}">
-                ${escapeHtml(doc.process_owner || '--')}
+            <!-- Date d'application -->
+            <td class="p-3 font-mono text-xs text-slate-300 whitespace-nowrap">
+                ${escapeHtml(doc.effective_date || '--')}
             </td>
 
             <!-- Date de révision avec alerte colorée si échéance < 30j -->
