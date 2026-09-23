@@ -19,7 +19,8 @@ function startApp() {
             status: '',
             process: '',
             origin: ''
-        }
+        },
+        currentSelectedDoc: null // Stocke le document actif dans le drawer
     };
 
     initEvents();
@@ -347,6 +348,7 @@ function initEvents() {
     bindCardFilter('card-brouillon', 'brouillon');
     bindCardFilter('card-perime', 'perime');
 
+    // Modale de création
     const btnOpenModal = document.getElementById('btn-open-modal') || document.getElementById('btn-new-document');
     const btnCloseModal = document.getElementById('close-modal') || document.getElementById('close-modal-btn');
     const btnCancelModal = document.getElementById('btn-cancel-modal') || document.getElementById('cancel-modal-btn');
@@ -361,6 +363,37 @@ function initEvents() {
         formDoc.addEventListener('submit', handleFormSubmit);
     }
 
+    // Modale de révision
+    const btnOpenRevise = document.getElementById('btn-open-revise');
+    const btnCloseRevise = document.getElementById('close-revise-modal');
+    const btnCancelRevise = document.getElementById('btn-cancel-revise');
+    const reviseModalOverlay = document.getElementById('revise-modal-overlay');
+
+    if (btnOpenRevise) btnOpenRevise.addEventListener('click', openReviseModal);
+    if (btnCloseRevise) btnCloseRevise.addEventListener('click', () => reviseModalOverlay?.classList.add('hidden'));
+    if (btnCancelRevise) btnCancelRevise.addEventListener('click', () => reviseModalOverlay?.classList.add('hidden'));
+
+    const formRevise = document.getElementById('revise-document-form');
+    if (formRevise) {
+        formRevise.addEventListener('submit', handleReviseSubmit);
+    }
+
+    // Modale de mise au rebut / péremption (Ajout Étape 2)
+    const btnOpenExpire = document.getElementById('btn-open-expire');
+    const btnCloseExpire = document.getElementById('close-expire-modal');
+    const btnCancelExpire = document.getElementById('btn-cancel-expire');
+    const expireModalOverlay = document.getElementById('expire-modal-overlay');
+
+    if (btnOpenExpire) btnOpenExpire.addEventListener('click', openExpireModal);
+    if (btnCloseExpire) btnCloseExpire.addEventListener('click', () => expireModalOverlay?.classList.add('hidden'));
+    if (btnCancelExpire) btnCancelExpire.addEventListener('click', () => expireModalOverlay?.classList.add('hidden'));
+
+    const formExpire = document.getElementById('expire-document-form');
+    if (formExpire) {
+        formExpire.addEventListener('submit', handleExpireSubmit);
+    }
+
+    // Drawer de consultation
     const closeDrawerBtn = document.getElementById('close-drawer') || document.getElementById('close-drawer-btn');
     const drawerOverlay = document.getElementById('drawer-overlay');
 
@@ -390,6 +423,9 @@ async function openDrawer(docId) {
     const doc = window.AppState.documents.find(d => d.id === docId || d.id === parseInt(docId));
     if (!doc) return;
 
+    // Stockage dans l'état global pour accès facile lors de la révision ou de la péremption
+    window.AppState.currentSelectedDoc = doc;
+
     setElText('drawer-code', doc.code);
     setElText('drawer-title', doc.title);
     
@@ -403,6 +439,16 @@ async function openDrawer(docId) {
     setElText('drawer-effective', doc.effective_date || '--');
     setElText('drawer-review', doc.review_date || '--');
 
+    // Gestion de l'affichage du bouton de mise au rebut (visible uniquement si "en_vigueur")
+    const containerExpire = document.getElementById('container-btn-expire');
+    if (containerExpire) {
+        if (doc.status === 'en_vigueur') {
+            containerExpire.classList.remove('hidden');
+        } else {
+            containerExpire.classList.add('hidden');
+        }
+    }
+
     const pdfLinkEl = document.getElementById('drawer-pdf-link');
     if (pdfLinkEl) {
         if (doc.file_path) {
@@ -413,7 +459,7 @@ async function openDrawer(docId) {
         }
     }
 
-    // Chargement dynamique de l'historique des versions ISO 17025
+    // Chargement dynamique de l'historique des versions ISO 17025 avec liens PDF
     const historyListEl = document.getElementById('drawer-history-list');
     if (historyListEl) {
         historyListEl.innerHTML = '<span class="text-slate-500 italic"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Chargement de l\'historique...</span>';
@@ -428,13 +474,16 @@ async function openDrawer(docId) {
                 historyListEl.innerHTML = '<span class="text-slate-500 italic">Aucun historique de version disponible.</span>';
             } else {
                 historyListEl.innerHTML = historyItems.map(h => `
-                    <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800/80 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="font-mono text-blue-400 font-semibold">v${escapeHtml(h.version)}</span>
                             <span class="text-[10px] text-slate-400 font-mono">${escapeHtml(h.created_at || '--')}</span>
                         </div>
-                        <p class="text-slate-300">${escapeHtml(h.change_description || 'Mise à jour du document')}</p>
-                        <div class="text-[10px] text-slate-500">Par : ${escapeHtml(h.author || 'Système')}</div>
+                        <p class="text-slate-300 text-xs">${escapeHtml(h.change_reason || 'Mise à jour du document')}</p>
+                        <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-800/60">
+                            <span>Pilote : ${escapeHtml(h.author || 'Système')}</span>
+                            ${h.file_path ? `<a href="${escapeHtml(h.file_path)}" target="_blank" class="text-rose-400 hover:text-rose-300 flex items-center gap-1"><i class="fa-solid fa-file-pdf"></i> Consulter PDF</a>` : '<span class="italic text-slate-600">Pas de fichier</span>'}
+                        </div>
                     </div>
                 `).join('');
             }
@@ -465,7 +514,7 @@ function setElText(id, txt) {
 }
 
 /* ==========================================================================
-   7. CRÉATION D'UN DOCUMENT (POST API)
+   7. CRÉATION, RÉVISION ET MISE AU REBUT DE DOCUMENTS (POST API)
    ========================================================================== */
 
 async function handleFormSubmit(e) {
@@ -511,6 +560,166 @@ async function handleFormSubmit(e) {
         }
     } catch (error) {
         console.error('Erreur lors de la soumission :', error);
+        alert(`Erreur critique :\n${error.message}`);
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    }
+}
+
+// --- OUVERTURE DE LA MODALE DE RÉVISION ---
+function openReviseModal() {
+    const doc = window.AppState.currentSelectedDoc;
+    
+    if (!doc) {
+        alert("Erreur : Aucun document sélectionné. Veuillez réouvrir le tiroir du document.");
+        return;
+    }
+
+    // Calcul automatique de la version suivante
+    let currentVerNum = parseInt(doc.version, 10);
+    let nextVersion = isNaN(currentVerNum) ? '02' : String(currentVerNum + 1).padStart(2, '0');
+
+    // Remplissage des champs de la modale de révision
+    document.getElementById('revise-doc-id').value = doc.id;
+    document.getElementById('revise-display-code').textContent = doc.code;
+    document.getElementById('revise-input-code').value = doc.code;
+    document.getElementById('revise-display-version').textContent = `v${doc.version || '01'} -> v${nextVersion}`;
+    document.getElementById('revise-input-version').value = nextVersion;
+
+    document.getElementById('revise-title').value = doc.title || '';
+    document.getElementById('revise-owner').value = doc.process_owner || '';
+    document.getElementById('revise-approver').value = doc.approver || '';
+    document.getElementById('revise-effective').value = doc.effective_date || '';
+    document.getElementById('revise-review').value = doc.review_date || '';
+
+    // Fermeture du tiroir et ouverture de la modale de révision
+    closeDrawer();
+    const reviseModal = document.getElementById('revise-modal-overlay');
+    if (reviseModal) {
+        reviseModal.classList.remove('hidden');
+    } else {
+        console.error("L'élément #revise-modal-overlay est introuvable dans le DOM.");
+    }
+}
+
+// --- SOUMISSION DE LA RÉVISION ---
+async function handleReviseSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Valider la révision';
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Révision en cours...';
+    }
+
+    try {
+        const response = await fetch('api/revise_document.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const rawText = await response.text();
+        let result;
+
+        try {
+            result = JSON.parse(rawText);
+        } catch (err) {
+            throw new Error(`Le serveur PHP a renvoyé du texte brut :\n${rawText.substring(0, 300)}`);
+        }
+
+        if (response.ok && result.success) {
+            await loadDocuments();
+            form.reset();
+
+            const reviseModal = document.getElementById('revise-modal-overlay');
+            if (reviseModal) reviseModal.classList.add('hidden');
+
+            alert('Révision enregistrée avec succès ! L\'ancienne version a été archivée.');
+        } else {
+            const errorMsg = result.error || 'Erreur BDD inconnue';
+            const detailsMsg = result.details ? `\nDétails : ${result.details}` : '';
+            alert(`Erreur lors de la révision :\n${errorMsg}${detailsMsg}`);
+        }
+    } catch (error) {
+        console.error('Erreur lors de la révision :', error);
+        alert(`Erreur critique :\n${error.message}`);
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    }
+}
+
+// --- OUVERTURE DE LA MODALE DE MISE AU REBUT (Ajout Étape 2) ---
+function openExpireModal() {
+    const doc = window.AppState.currentSelectedDoc;
+    
+    if (!doc) {
+        alert("Erreur : Aucun document sélectionné.");
+        return;
+    }
+
+    document.getElementById('expire-doc-id').value = doc.id;
+    document.getElementById('expire-display-code').textContent = doc.code;
+
+    closeDrawer();
+    const expireModal = document.getElementById('expire-modal-overlay');
+    if (expireModal) {
+        expireModal.classList.remove('hidden');
+    }
+}
+
+// --- SOUMISSION DE LA MISE AU REBUT (Ajout Étape 2) ---
+async function handleExpireSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Confirmer la péremption';
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Traitement...';
+    }
+
+    try {
+        const response = await fetch('api/expire_document.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const rawText = await response.text();
+        let result;
+
+        try {
+            result = JSON.parse(rawText);
+        } catch (err) {
+            throw new Error(`Le serveur PHP a renvoyé du texte brut :\n${rawText.substring(0, 300)}`);
+        }
+
+        if (response.ok && result.success) {
+            await loadDocuments();
+            form.reset();
+
+            const expireModal = document.getElementById('expire-modal-overlay');
+            if (expireModal) expireModal.classList.add('hidden');
+
+            alert('Document mis au rebut / périmé avec succès !');
+        } else {
+            const errorMsg = result.error || 'Erreur BDD inconnue';
+            alert(`Erreur lors de la péremption :\n${errorMsg}`);
+        }
+    } catch (error) {
+        console.error('Erreur lors de la péremption :', error);
         alert(`Erreur critique :\n${error.message}`);
     } finally {
         if (submitBtn) {

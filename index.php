@@ -413,6 +413,83 @@
         </div>
     </div>
 
+    <!-- MODALE : RÉVISION / NOUVELLE VERSION DE DOCUMENT -->
+    <div id="revise-modal-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-code-pull-request text-amber-400"></i>
+                    <h3 class="font-semibold text-slate-100 text-sm">Réviser le document (Nouvelle Version)</h3>
+                </div>
+                <button id="close-revise-modal" class="text-slate-400 hover:text-slate-200 text-lg p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="revise-document-form" enctype="multipart/form-data" class="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
+                <input type="hidden" name="document_id" id="revise-doc-id">
+
+                <div class="grid grid-cols-2 gap-4 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <div>
+                        <span class="text-[10px] text-slate-400 block uppercase">Code Document</span>
+                        <span id="revise-display-code" class="font-mono text-blue-400 font-semibold">--</span>
+                        <input type="hidden" name="code" id="revise-input-code">
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block uppercase">Version Actuelle -> Nouvelle</span>
+                        <span id="revise-display-version" class="font-mono text-amber-400 font-semibold">--</span>
+                        <input type="hidden" name="version" id="revise-input-version">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Titre du Document *</label>
+                    <input type="text" name="title" id="revise-title" required class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Pilote / Process Owner</label>
+                        <input type="text" name="process_owner" id="revise-owner" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Approbateur</label>
+                        <input type="text" name="approver" id="revise-approver" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Nouvelle date d'application</label>
+                        <input type="date" name="effective_date" id="revise-effective" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block font-medium text-slate-300 mb-1">Nouvelle révision prévisionnelle</label>
+                        <input type="date" name="review_date" id="revise-review" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1 text-amber-400 font-semibold">Motif de la modification / Révision * (ISO 17025)</label>
+                    <textarea name="change_reason" required rows="2" placeholder="Expliquez les raisons de cette mise à jour (ex: Évolution de la méthode d'essai...)" class="w-full px-3 py-2 bg-slate-950 border border-amber-500/40 rounded-lg text-slate-100 focus:outline-none focus:border-amber-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Nouveau fichier PDF révisé</label>
+                    <input type="file" name="file" accept=".pdf" class="w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+                </div>
+
+                <div class="pt-4 border-t border-slate-800 flex justify-end gap-3">
+                    <button type="button" id="btn-cancel-revise" class="px-4 py-2 rounded-lg font-medium text-slate-400 hover:bg-slate-800 transition">Annuler</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg font-medium bg-amber-600 hover:bg-amber-500 text-white transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate"></i> Valider la révision
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- TIROIR LATÉRAL (DRAWER) DE CONSULTATION -->
     <div id="drawer-overlay" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden"></div>
     
@@ -463,6 +540,20 @@
                 </div>
             </div>
 
+            <!-- Bouton de Révision ISO 17025 -->
+            <div>
+                <button id="btn-open-revise" class="w-full py-2 bg-amber-600/10 hover:bg-amber-600/20 text-amber-400 border border-amber-500/30 rounded-xl font-medium text-xs transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-code-pull-request"></i> Réviser ce document (Nouvelle version)
+                </button>
+            </div>
+
+            <!-- Bouton de Mise au rebut / Périmer (Ajout Étape 2 - Géré dynamiquement en JS si "en_vigueur") -->
+            <div id="container-btn-expire" class="hidden">
+                <button id="btn-open-expire" class="w-full py-2 bg-rose-600/10 hover:bg-rose-600/20 text-rose-400 border border-rose-500/30 rounded-xl font-medium text-xs transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-box-archive"></i> Mettre au rebut / Périmer ce document
+                </button>
+            </div>
+
             <!-- Section Historique & Traçabilité ISO 17025 -->
             <div class="border-t border-slate-800 pt-4">
                 <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center">
@@ -479,6 +570,42 @@
             <a id="drawer-pdf-link" href="#" target="_blank" class="w-full py-2.5 bg-rose-600/10 hover:bg-rose-600/20 text-rose-400 border border-rose-500/30 rounded-xl font-medium text-xs transition flex items-center justify-center gap-2 hidden">
                 <i class="fa-solid fa-file-pdf"></i> Ouvrir le document PDF
             </a>
+        </div>
+    </div>
+
+    <!-- MODALE : MISE AU REBUT / PÉREMPTION DE DOCUMENT (Ajout Étape 2) -->
+    <div id="expire-modal-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+                    <h3 class="font-semibold text-slate-100 text-sm">Mettre au rebut / Périmer le document</h3>
+                </div>
+                <button id="close-expire-modal" class="text-slate-400 hover:text-slate-200 text-lg p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="expire-document-form" class="p-6 space-y-4 text-xs">
+                <input type="hidden" name="document_id" id="expire-doc-id">
+
+                <div class="bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl text-rose-300">
+                    <p class="font-medium">Attention :</p>
+                    <p class="mt-1 text-slate-300">Vous êtes sur le point de périmer le document <span id="expire-display-code" class="font-mono font-bold text-rose-400">--</span>. Cette action arrêtera sa validité dans le système qualité.</p>
+                </div>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Motif obligatoire de la mise au rebut * (ISO 17025)</label>
+                    <textarea name="expiry_reason" required rows="3" placeholder="Expliquez pourquoi ce document est périmé (ex: Remplacé par une nouvelle version...)" class="w-full px-3 py-2 bg-slate-950 border border-rose-500/40 rounded-lg text-slate-100 focus:outline-none focus:border-rose-500"></textarea>
+                </div>
+
+                <div class="pt-2 flex justify-end gap-3">
+                    <button type="button" id="btn-cancel-expire" class="px-4 py-2 rounded-lg font-medium text-slate-400 hover:bg-slate-800 transition">Annuler</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg font-medium bg-rose-600 hover:bg-rose-500 text-white transition flex items-center gap-2">
+                        <i class="fa-solid fa-box-archive"></i> Confirmer la péremption
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

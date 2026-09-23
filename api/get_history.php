@@ -1,7 +1,7 @@
 <?php
 /**
  * QualiTech - Système de Gestion Documentaire ISO 17025
- * api/get_history.php - Récupération de l'historique des versions d'un document
+ * api/get_history.php - Récupération de l'historique des versions d'un document (GET)
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -21,9 +21,9 @@ try {
         exit;
     }
 
-    // Requête pour récupérer l'historique des versions du document trié par date décroissante
+    // Requête pour récupérer l'historique incluant le file_path pour consultation des anciennes versions
     $stmt = $pdo->prepare('
-        SELECT version, change_reason, process_owner AS author, created_at 
+        SELECT version, title, change_reason, process_owner AS author, effective_date, file_path, created_at 
         FROM document_history 
         WHERE document_id = ? 
         ORDER BY id DESC
