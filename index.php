@@ -462,6 +462,17 @@
                     <span id="drawer-review" class="font-mono text-slate-300">--</span>
                 </div>
             </div>
+
+            <!-- Section Historique & Traçabilité ISO 17025 -->
+            <div class="border-t border-slate-800 pt-4">
+                <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center">
+                    <i class="fa-solid fa-clock-rotate-left mr-1.5 text-blue-400"></i> Historique des versions
+                </h4>
+                <div id="drawer-history-list" class="space-y-2 text-xs">
+                    <!-- Rempli dynamiquement par app.js -->
+                    <span class="text-slate-500 italic">Sélectionnez un document...</span>
+                </div>
+            </div>
         </div>
 
         <div class="pt-4 border-t border-slate-800">

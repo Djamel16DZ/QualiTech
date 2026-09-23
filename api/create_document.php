@@ -32,6 +32,7 @@ try {
     $effective_date = !empty($_POST['effective_date']) ? $_POST['effective_date'] : null;
     $review_date    = !empty($_POST['review_date']) ? $_POST['review_date'] : null;
     $origin         = trim($_POST['origin'] ?? 'interne');
+    $change_reason  = trim($_POST['change_reason'] ?? 'Création initiale du document'); // Récupération de la raison de modification
 
     // Validation des champs obligatoires
     if (empty($code) || empty($title) || empty($type)) {
@@ -95,7 +96,7 @@ try {
         }
     }
 
-    // 3. Insertion en base de données MariaDB
+    // 3. Insertion en base de données MariaDB (Table documents)
     $query = "
         INSERT INTO documents (
             code, title, type, process_code, version, status, 
@@ -124,11 +125,35 @@ try {
 
     $newId = (int) $pdo->lastInsertId();
 
+    // 4. Enregistrement automatique dans la table d'historique (Traçabilité ISO 17025)
+    $queryHistory = "
+        INSERT INTO document_history (
+            document_id, code, title, version, status, 
+            process_owner, approver, effective_date, review_date, file_path, change_reason
+        ) VALUES (
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        )
+    ";
+    $stmtHistory = $pdo->prepare($queryHistory);
+    $stmtHistory->execute([
+        $newId,
+        $code,
+        $title,
+        $version,
+        $status,
+        $process_owner,
+        $approver,
+        $effective_date,
+        $review_date,
+        $filePath,
+        $change_reason
+    ]);
+
     // Réponse HTTP 201 Created
     http_response_code(201);
     echo json_encode([
         'success'   => true,
-        'message'   => 'Document enregistré avec succès.',
+        'message'   => 'Document enregistré et tracé avec succès.',
         'id'        => $newId,
         'file_path' => $filePath
     ], JSON_UNESCAPED_UNICODE);

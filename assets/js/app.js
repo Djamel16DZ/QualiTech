@@ -386,7 +386,7 @@ function bindCardFilter(cardId, statusValue) {
    6. DRAWER (TIROIR DE CONSULTATION)
    ========================================================================== */
 
-function openDrawer(docId) {
+async function openDrawer(docId) {
     const doc = window.AppState.documents.find(d => d.id === docId || d.id === parseInt(docId));
     if (!doc) return;
 
@@ -410,6 +410,37 @@ function openDrawer(docId) {
             pdfLinkEl.classList.remove('hidden');
         } else {
             pdfLinkEl.classList.add('hidden');
+        }
+    }
+
+    // Chargement dynamique de l'historique des versions ISO 17025
+    const historyListEl = document.getElementById('drawer-history-list');
+    if (historyListEl) {
+        historyListEl.innerHTML = '<span class="text-slate-500 italic"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Chargement de l\'historique...</span>';
+        
+        try {
+            const res = await fetch(`api/get_history.php?document_id=${doc.id}`);
+            if (!res.ok) throw new Error('Erreur serveur lors de la récupération de l\'historique');
+            
+            const historyItems = await res.json();
+            
+            if (!historyItems || historyItems.length === 0) {
+                historyListEl.innerHTML = '<span class="text-slate-500 italic">Aucun historique de version disponible.</span>';
+            } else {
+                historyListEl.innerHTML = historyItems.map(h => `
+                    <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-blue-400 font-semibold">v${escapeHtml(h.version)}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">${escapeHtml(h.created_at || '--')}</span>
+                        </div>
+                        <p class="text-slate-300">${escapeHtml(h.change_description || 'Mise à jour du document')}</p>
+                        <div class="text-[10px] text-slate-500">Par : ${escapeHtml(h.author || 'Système')}</div>
+                    </div>
+                `).join('');
+            }
+        } catch (err) {
+            console.error(err);
+            historyListEl.innerHTML = '<span class="text-rose-400 italic">Impossible de charger l\'historique.</span>';
         }
     }
 
@@ -456,31 +487,31 @@ async function handleFormSubmit(e) {
             body: formData
         });
 
-        const contentType = response.headers.get('content-type');
-        let result = {};
+        const rawText = await response.text();
+        let result;
 
-        if (contentType && contentType.includes('application/json')) {
-            result = await response.json();
-        } else {
-            const rawText = await response.text();
-            throw new Error(`Le serveur PHP renvoie un format invalide : ${rawText.substring(0, 150)}`);
+        try {
+            result = JSON.parse(rawText);
+        } catch (err) {
+            throw new Error(`Le serveur PHP a renvoyé du texte brut / HTML au lieu de JSON :\n${rawText.substring(0, 300)}`);
         }
 
         if (response.ok && result.success) {
             await loadDocuments();
             form.reset();
             
-            // Fermeture de la modale quel que soit son identifiant
             const modalOverlay = document.getElementById('modal-overlay') || document.getElementById('add-document-modal');
             if (modalOverlay) modalOverlay.classList.add('hidden');
 
             alert('Document enregistré avec succès !');
         } else {
-            alert(result.error || 'Erreur lors de la création du document.');
+            const errorMsg = result.error || 'Erreur BDD inconnue';
+            const detailsMsg = result.details ? `\nDétails MariaDB : ${result.details}` : '';
+            alert(`Erreur d'enregistrement :\n${errorMsg}${detailsMsg}`);
         }
     } catch (error) {
         console.error('Erreur lors de la soumission :', error);
-        alert(`Erreur d'envoi : ${error.message}`);
+        alert(`Erreur critique :\n${error.message}`);
     } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
