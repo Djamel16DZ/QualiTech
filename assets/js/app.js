@@ -305,6 +305,25 @@ function initEvents() {
         });
     }
 
+    // [AJOUT] Écouteur pour la liste déroulante des processus
+    const filterProcess = document.getElementById('filter-process');
+    if (filterProcess) {
+        filterProcess.addEventListener('change', (e) => {
+            const val = e.target.value;
+            window.AppState.filters.process = val;
+            
+            // Synchronisation optionnelle de l'UI de la barre latérale si besoin
+            document.querySelectorAll('.nav-item').forEach(i => {
+                i.classList.remove('bg-slate-800/60', 'font-medium', 'text-slate-100');
+                if (i.getAttribute('data-nav-filter') === val) {
+                    i.classList.add('bg-slate-800/60', 'font-medium', 'text-slate-100');
+                }
+            });
+
+            applyFilters();
+        });
+    }
+
     const filterType = document.getElementById('filter-type');
     if (filterType) {
         filterType.addEventListener('change', (e) => {
@@ -327,7 +346,14 @@ function initEvents() {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('bg-slate-800/60', 'font-medium', 'text-slate-100'));
             item.classList.add('bg-slate-800/60', 'font-medium', 'text-slate-100');
 
-            window.AppState.filters.process = item.getAttribute('data-nav-filter') || '';
+            const processVal = item.getAttribute('data-nav-filter') || '';
+            window.AppState.filters.process = processVal;
+
+            // Synchronisation de la liste déroulante avec la barre latérale
+            if (filterProcess) {
+                filterProcess.value = processVal;
+            }
+
             applyFilters();
         });
     });
@@ -423,7 +449,6 @@ async function openDrawer(docId) {
     const doc = window.AppState.documents.find(d => d.id === docId || d.id === parseInt(docId));
     if (!doc) return;
 
-    // Stockage dans l'état global pour accès facile lors de la révision ou de la péremption
     window.AppState.currentSelectedDoc = doc;
 
     setElText('drawer-code', doc.code);
@@ -439,7 +464,6 @@ async function openDrawer(docId) {
     setElText('drawer-effective', doc.effective_date || '--');
     setElText('drawer-review', doc.review_date || '--');
 
-    // Gestion de l'affichage du bouton de mise au rebut (visible uniquement si "en_vigueur")
     const containerExpire = document.getElementById('container-btn-expire');
     if (containerExpire) {
         if (doc.status === 'en_vigueur') {
@@ -459,7 +483,6 @@ async function openDrawer(docId) {
         }
     }
 
-    // Chargement dynamique de l'historique des versions ISO 17025 avec liens PDF
     const historyListEl = document.getElementById('drawer-history-list');
     if (historyListEl) {
         historyListEl.innerHTML = '<span class="text-slate-500 italic"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Chargement de l\'historique...</span>';
@@ -569,7 +592,6 @@ async function handleFormSubmit(e) {
     }
 }
 
-// --- OUVERTURE DE LA MODALE DE RÉVISION ---
 function openReviseModal() {
     const doc = window.AppState.currentSelectedDoc;
     
@@ -578,11 +600,9 @@ function openReviseModal() {
         return;
     }
 
-    // Calcul automatique de la version suivante
     let currentVerNum = parseInt(doc.version, 10);
     let nextVersion = isNaN(currentVerNum) ? '02' : String(currentVerNum + 1).padStart(2, '0');
 
-    // Remplissage des champs de la modale de révision
     document.getElementById('revise-doc-id').value = doc.id;
     document.getElementById('revise-display-code').textContent = doc.code;
     document.getElementById('revise-input-code').value = doc.code;
@@ -595,17 +615,13 @@ function openReviseModal() {
     document.getElementById('revise-effective').value = doc.effective_date || '';
     document.getElementById('revise-review').value = doc.review_date || '';
 
-    // Fermeture du tiroir et ouverture de la modale de révision
     closeDrawer();
     const reviseModal = document.getElementById('revise-modal-overlay');
     if (reviseModal) {
         reviseModal.classList.remove('hidden');
-    } else {
-        console.error("L'élément #revise-modal-overlay est introuvable dans le DOM.");
     }
 }
 
-// --- SOUMISSION DE LA RÉVISION ---
 async function handleReviseSubmit(e) {
     e.preventDefault();
     const form = e.target;
@@ -658,7 +674,6 @@ async function handleReviseSubmit(e) {
     }
 }
 
-// --- OUVERTURE DE LA MODALE DE MISE AU REBUT (Ajout Étape 2) ---
 function openExpireModal() {
     const doc = window.AppState.currentSelectedDoc;
     
@@ -677,7 +692,6 @@ function openExpireModal() {
     }
 }
 
-// --- SOUMISSION DE LA MISE AU REBUT (Ajout Étape 2) ---
 async function handleExpireSubmit(e) {
     e.preventDefault();
     const form = e.target;
