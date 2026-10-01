@@ -24,79 +24,79 @@
         }
     </script>
 </head>
-<body class="bg-slate-950 text-slate-100 h-screen flex flex-col font-sans antialiased overflow-hidden">
+<body class="bg-slate-950 text-slate-100 h-screen flex overflow-hidden font-sans antialiased">
 
-    <!-- En-tête Principal -->
-    <header class="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30 w-full shrink-0">
-        <div class="w-full px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-100 hover:bg-slate-800 p-2 rounded-lg transition" title="Masquer/Afficher le panneau latéral">
-                    <i class="fa-solid fa-bars text-lg"></i>
-                </button>
-                <div class="bg-blue-600/20 border border-blue-500/30 p-2 rounded-lg text-blue-400">
-                    <i class="fa-solid fa-flask-vial text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-100 leading-tight">QualiTech <span class="text-xs font-normal text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded ml-2">ISO 17025</span></h1>
-                    <p class="text-xs text-slate-400">Gestion Documentaire & Traçabilité Qualité</p>
-                </div>
-            </div>
+    <!-- Barre Latérale (Placée tout en haut de la page, sur toute la hauteur) -->
+    <aside id="sidebar-nav" class="w-72 shrink-0 border-r border-slate-800/80 bg-slate-900/30 p-4 space-y-4 overflow-y-auto h-full transition-all duration-200">
+        <div class="space-y-3">
+            <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
+                <span>Navigation</span>
+                <i class="fa-solid fa-folder-open text-slate-600"></i>
+            </h2>
+            
+            <nav class="space-y-3 text-xs">
+                <a href="#" class="nav-item flex items-center justify-between px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-800 transition bg-slate-800/60 font-medium" data-nav-filter="">
+                    <span>Système documentaire</span>
+                    <i class="fa-solid fa-layer-group text-[10px] text-slate-500"></i>
+                </a>
+            </nav>
 
-            <!-- Recherche globale & Action rapide -->
-            <div class="flex items-center space-x-4">
-                <div class="relative w-64 md:w-80">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                    <input type="text" id="global-search" placeholder="Rechercher code, titre, pilote... (/)" 
-                           class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
-                </div>
-                <button id="btn-open-modal" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg font-medium flex items-center space-x-2 transition shadow-lg shadow-blue-600/20 whitespace-nowrap">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Nouveau Document</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Zone principale -->
-    <div class="flex-1 w-full flex h-[calc(100vh-4rem)] overflow-hidden">
-
-        <!-- Barre Latérale -->
-        <aside id="sidebar-nav" class="w-72 shrink-0 border-r border-slate-800/80 bg-slate-900/30 p-4 space-y-4 overflow-y-auto h-full transition-all duration-200">
-            <div class="space-y-3">
-                <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between px-1">
-                    <span>Navigation</span>
-                    <i class="fa-solid fa-folder-open text-slate-600"></i>
-                </h2>
-                
-                <nav class="space-y-3 text-xs">
-                    <a href="#" class="nav-item flex items-center justify-between px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-800 transition bg-slate-800/60 font-medium" data-nav-filter="">
-                        <span>Système documentaire</span>
-                        <i class="fa-solid fa-layer-group text-[10px] text-slate-500"></i>
+            <div class="border-t border-slate-800/80 pt-3 mt-3">
+                <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Origine</h3>
+                <nav class="space-y-0.5 text-xs">
+                    <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="">
+                        <span>Toutes les origines</span>
+                        <i class="fa-solid fa-border-all text-[9px]"></i>
+                    </a>
+                    <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="interne">
+                        <span>Interne (Ged)</span>
+                        <i class="fa-solid fa-house text-[9px]"></i>
+                    </a>
+                    <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="externe">
+                        <span>Externe (Normes, Client)</span>
+                        <i class="fa-solid fa-globe text-[9px]"></i>
                     </a>
                 </nav>
+            </div>
+        </div>
+    </aside>
 
-                <div class="border-t border-slate-800/80 pt-3 mt-3">
-                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Origine</h3>
-                    <nav class="space-y-0.5 text-xs">
-                        <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="">
-                            <span>Toutes les origines</span>
-                            <i class="fa-solid fa-border-all text-[9px]"></i>
-                        </a>
-                        <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="interne">
-                            <span>Interne (Ged)</span>
-                            <i class="fa-solid fa-house text-[9px]"></i>
-                        </a>
-                        <a href="#" class="nav-type flex items-center justify-between px-2 py-1 rounded text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition" data-nav-type="externe">
-                            <span>Externe (Normes, Client)</span>
-                            <i class="fa-solid fa-globe text-[9px]"></i>
-                        </a>
-                    </nav>
+    <!-- Conteneur de droite (Header + Contenu principal) pour occuper le reste de la largeur -->
+    <div class="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
+
+        <!-- En-tête Principal -->
+        <header class="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30 w-full shrink-0">
+            <div class="w-full px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button id="btn-toggle-sidebar" onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-100 hover:bg-slate-800 p-2 rounded-lg transition" title="Masquer/Afficher le panneau latéral">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <div class="bg-blue-600/20 border border-blue-500/30 p-2 rounded-lg text-blue-400">
+                        <i class="fa-solid fa-flask-vial text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-100 leading-tight">QualiTech <span class="text-xs font-normal text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded ml-2">ISO 17025</span></h1>
+                        <p class="text-xs text-slate-400">Gestion Documentaire & Traçabilité Qualité</p>
+                    </div>
+                </div>
+
+                <!-- Recherche globale & Action rapide -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative w-64 md:w-80">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <input type="text" id="global-search" placeholder="Rechercher code, titre, pilote... (/)" 
+                               class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                    <button id="btn-open-modal" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3.5 py-2 rounded-lg font-medium flex items-center space-x-2 transition shadow-lg shadow-blue-600/20 whitespace-nowrap">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Nouveau Document</span>
+                    </button>
                 </div>
             </div>
-        </aside>
+        </header>
 
         <!-- Zone de Contenu Principal -->
-        <main class="flex-1 overflow-y-auto p-6 space-y-6 h-full min-w-0">
+        <main class="flex-1 overflow-y-auto p-6 space-y-6 h-[calc(100vh-4rem)] min-w-0">
 
             <!-- Statistiques -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
